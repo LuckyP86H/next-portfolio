@@ -46,8 +46,8 @@ export default function Contact() {
     if (!formData.message.trim()) {
       errors.message = 'Message is required';
       valid = false;
-    } else if (formData.message.trim().length < 20) {
-      errors.message = 'Message should be at least 20 characters';
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Message should be at least 10 characters';
       valid = false;
     }
 
