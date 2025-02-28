@@ -45,19 +45,10 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <div className="flex-shrink-0">
-            <Link href="/" className="font-mono text-xl font-bold text-primary-600 dark:text-primary-400">
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                &lt;Paul.Xu /&gt;
-              </motion.span>
-            </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-4 items-center">
+          <div className="hidden md:flex items-center space-x-4">
             <div className="flex items-center space-x-4">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;

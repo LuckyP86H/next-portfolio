@@ -28,7 +28,7 @@ export default function RootLayout({
         <meta name="description" content="Paul Xu's Portfolio - Software Engineer" />
         <title>Paul Xu - Software Engineer</title>
       </head>
-      <body className={`${inter.variable} ${firaCode.variable} font-sans dark:bg-dark-background min-h-screen flex flex-col`}>
+      <body className={`${inter.variable} ${firaCode.variable} font-sans min-h-screen flex flex-col`}>
         <ThemeProvider>
           <div className="flex flex-col min-h-screen transition-colors duration-300">
             <Header />

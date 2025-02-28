@@ -22,7 +22,7 @@ module.exports = {
           900: '#0c4a6e',
           950: '#082f49',
         },
-        // Software engineer-friendly dark theme
+        // Dark theme colors
         dark: {
           background: '#0f172a', // Slate 900
           card: '#1e293b',       // Slate 800
@@ -49,6 +49,10 @@ module.exports = {
           '0%': { transform: 'translateX(20px)', opacity: '0' },
           '100%': { transform: 'translateX(0)', opacity: '1' },
         },
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui'],
+        mono: ['var(--font-fira-code)', 'ui-monospace', 'monospace'],
       },
     },
   },

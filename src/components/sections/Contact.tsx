@@ -87,6 +87,13 @@ export default function Contact() {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold mb-4">Contact Me</h2>
+        <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+          Have a question or want to work together? Feel free to reach out using the form below or contact information.
+        </p>
+      </div>
+      
       <div className="grid md:grid-cols-2 gap-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -94,15 +101,17 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="space-y-6"
         >
-          <h3 className="text-2xl font-bold">Get in Touch</h3>
-          <p className="text-gray-700 dark:text-gray-300">
-            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-          </p>
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-bold mb-4">Get in Touch</h3>
+            <p className="text-gray-700 dark:text-gray-300">
+              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+            </p>
+          </div>
           
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3">
-              <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
-                <MailIcon className="h-5 w-5" />
+          <div className="space-y-6 mx-auto md:mx-0 max-w-xs md:max-w-none">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
+                <MailIcon className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-medium">Email</h4>
@@ -110,9 +119,9 @@ export default function Contact() {
               </div>
             </div>
             
-            <div className="flex items-start space-x-3">
-              <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
-                <Phone className="h-5 w-5" />
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
+                <Phone className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-medium">Phone</h4>
@@ -120,9 +129,9 @@ export default function Contact() {
               </div>
             </div>
             
-            <div className="flex items-start space-x-3">
-              <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
-                <MapPin className="h-5 w-5" />
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
+                <MapPin className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-medium">Location</h4>
@@ -138,6 +147,7 @@ export default function Contact() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div className="bg-white dark:bg-dark-card rounded-lg shadow-md p-6">
+            <h3 className="text-xl font-bold mb-4 text-center">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

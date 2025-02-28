@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, X } from 'lucide-react';
-// Project data
+
 const projects = [
   {
     id: 'letter-guess',
@@ -93,7 +93,7 @@ export default function Portfolio() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, staggerChildren: 0.1 }}
+        transition={{ duration: 0.5 }}
       >
         <AnimatePresence>
           {filteredProjects.map(project => (
@@ -107,7 +107,7 @@ export default function Portfolio() {
               onClick={() => setSelectedProject(project)}
               className="bg-white dark:bg-dark-card rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105 hover:shadow-lg"
             >
-              <div className="relative h-48">
+              <div className="relative h-48 bg-gray-200 dark:bg-gray-700">
                 <Image 
                   src={project.image} 
                   alt={project.title}
@@ -150,7 +150,7 @@ export default function Portfolio() {
               className="bg-white dark:bg-dark-card rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
               onClick={e => e.stopPropagation()}
             >
-              <div className="relative h-64">
+              <div className="relative h-64 bg-gray-200 dark:bg-gray-700">
                 <Image 
                   src={selectedProject.image} 
                   alt={selectedProject.title}

@@ -6,8 +6,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import About from '@/components/sections/About';
 import Portfolio from '@/components/sections/Portfolio';
 import Contact from '@/components/sections/Contact';
+import Hero from '@/components/sections/Hero'; 
 
 const sections = [
+  { id: 'hero', component: Hero, title: 'Home' },
   { id: 'about', component: About, title: 'About' },
   { id: 'portfolio', component: Portfolio, title: 'Portfolio' },
   { id: 'contact', component: Contact, title: 'Contact' },
@@ -87,7 +89,7 @@ export default function HomePage() {
   return (
     <div 
       ref={containerRef}
-      className="relative h-full min-h-screen"
+      className="relative h-full min-h-[calc(100vh-64px)]" // Adjust for header height
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
