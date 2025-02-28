@@ -115,7 +115,7 @@ export default function Contact() {
               </div>
               <div>
                 <h4 className="font-medium">Email</h4>
-                <p className="text-gray-600 dark:text-gray-400">paul.xu@example.com</p>
+                <p className="text-gray-600 dark:text-gray-400">paulxu155@gmail.com</p>
               </div>
             </div>
             

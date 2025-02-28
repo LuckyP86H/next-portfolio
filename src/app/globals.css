@@ -293,3 +293,162 @@ svg .domain {
 .animate-slide-up {
   animation: slideUp 0.5s ease-out forwards;
 }
+
+/* Page transition animations */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 500ms, transform 500ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 500ms, transform 500ms;
+}
+
+/* Custom behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Snap scrolling */
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-mandatory {
+  --tw-scroll-snap-strictness: mandatory;
+}
+
+/* Skills tooltip styling */
+.skills-tooltip {
+  transition: visibility 0.2s, opacity 0.2s;
+  font-family: var(--font-inter), ui-sans-serif, system-ui;
+  line-height: 1.5;
+  z-index: 50;
+}
+
+.dark .skills-tooltip {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+/* Custom font styles */
+.font-light {
+  font-weight: 300;
+}
+
+/* Enhanced scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 20px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.7);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(75, 85, 99, 0.7);
+}
+
+/* Hide scrollbar but allow scrolling */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Full-page section styles */
+.full-page-section {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.7s ease-in-out;
+}
+
+/* Section navigation dots */
+.section-dots {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 50;
+}
+
+.section-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.section-dot.active {
+  transform: scale(1.33);
+}
+
+/* Fix for d3 charts in dark mode */
+.dark .d3-chart text {
+  fill: #e2e8f0 !important;
+}
+
+.d3-chart .chart-tooltip {
+  position: absolute;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  pointer-events: none;
+  z-index: 20;
+  max-width: 18rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.dark .d3-chart .chart-tooltip {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+}
+
+.d3-chart .chart-tooltip {
+  background-color: white;
+  color: #1e293b;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}

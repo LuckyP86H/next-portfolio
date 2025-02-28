@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FaArrowRight } from 'react-icons/fa'; // Updated import
+import { FaArrowRight } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
+import Typewriter from 'typewriter-effect'; // Updated import
 
 export default function Hero() {
   // Get the basePath from environment
@@ -22,7 +23,13 @@ export default function Hero() {
           Hello, I'm <span className="text-primary-600 dark:text-primary-400">Paul Xu</span>
         </h1>
         <h2 className="text-2xl md:text-3xl font-medium text-gray-700 dark:text-gray-300 mb-6">
-          Software Engineer
+          <Typewriter
+            options={{
+              strings: ['Software Engineer', 'Backend', 'Java', 'Spring', 'Kubernetes'],
+              autoStart: true,
+              loop: true,
+            }}
+          />
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
           I build scalable backend systems and enjoy working with Java, Spring, Docker, and Kubernetes.
@@ -33,7 +40,6 @@ export default function Hero() {
             href="#about"
             onClick={(e) => {
               e.preventDefault();
-              // Fix: Cast the element to HTMLButtonElement which has the click() method
               const aboutButton = document.querySelector('button[aria-label="Go to About section"]') as HTMLButtonElement;
               aboutButton?.click();
             }}
@@ -51,7 +57,7 @@ export default function Hero() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Download Resume <FaArrowRight className="ml-2 h-4 w-4" /> {/* Updated icon */}
+            Download Resume <FaArrowRight className="ml-2 h-4 w-4" />
           </motion.a>
         </div>
       </motion.div>

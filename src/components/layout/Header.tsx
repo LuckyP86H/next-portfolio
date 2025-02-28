@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { FaBars, FaTimes } from 'react-icons/fa'; // Updated import
 import ThemeToggle from '../ui/ThemeToggle';
 
 const navigation = [
@@ -86,9 +86,9 @@ export default function Header() {
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
+                <FaTimes className="block h-6 w-6" aria-hidden="true" /> // Updated icon
               ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
+                <FaBars className="block h-6 w-6" aria-hidden="true" /> // Updated icon
               )}
             </button>
           </div>
