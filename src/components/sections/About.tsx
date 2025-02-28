@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent, WheelEvent, TouchEvent } from 'react';
 import Image from 'next/image';
 import { FaFileDownload, FaArrowUp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -120,7 +121,7 @@ export default function About(props: AboutProps = {}) {
 
   // Keyboard navigation handling
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {  // Add KeyboardEvent type
       if (isTransitioning) return;
       
       if (e.key === 'ArrowDown' || e.key === 'PageDown') {
@@ -146,7 +147,7 @@ export default function About(props: AboutProps = {}) {
     let isHandlingWheel = false;
     let wheelTimer = null;
     
-    const handleWheel = (e) => {
+    const handleWheel = (e: WheelEvent) => { // Add WheelEvent type
       if (isTransitioning || isHandlingWheel) return;
       
       // Prevent natural scrolling
@@ -227,11 +228,11 @@ export default function About(props: AboutProps = {}) {
   // Touch handling for swipe
   const [touchStart, setTouchStart] = useState(null);
   
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: TouchEvent) => {  // Add TouchEvent type
     setTouchStart(e.touches[0].clientY);
   };
   
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: TouchEvent) => {  // Add TouchEvent type
     if (!touchStart || isTransitioning) return;
     
     const touchY = e.touches[0].clientY;
