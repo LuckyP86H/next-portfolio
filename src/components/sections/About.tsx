@@ -22,6 +22,8 @@ const skills = [
 
 export default function About() {
   const svgRef = useRef<SVGSVGElement>(null);
+  // Get the basePath from environment
+  const basePath = process.env.NODE_ENV === 'production' ? '/next-portfolio' : '';
 
   useEffect(() => {
     if (svgRef.current) {
@@ -152,7 +154,7 @@ export default function About() {
               }}
             >
               <Image
-                src="/assets/images/profile.jpg"
+                src={`${basePath}/assets/images/profile.jpg`}
                 alt="Paul Xu"
                 width={120}
                 height={120}
@@ -167,7 +169,7 @@ export default function About() {
             <p style={{ color: '#4b5563', lineHeight: '1.625' }}>{aboutMeContent}</p>
             
             <a
-              href="/Resume.pdf"
+              href={`${basePath}/Resume.pdf`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center px-4 py-2 mt-4 rounded-md bg-primary-600 hover:bg-primary-700 text-white transition-colors"

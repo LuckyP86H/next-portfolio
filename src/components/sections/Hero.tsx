@@ -2,9 +2,14 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { FaArrowRight } from 'react-icons/fa'; // Updated import
+import { usePathname } from 'next/navigation';
 
 export default function Hero() {
+  // Get the basePath from environment
+  const basePath = process.env.NODE_ENV === 'production' ? '/next-portfolio' : '';
+  const pathname = usePathname();
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] text-center">
       <motion.div
@@ -39,14 +44,14 @@ export default function Hero() {
             Learn More About Me
           </motion.a>
           <motion.a
-            href="/Resume.pdf"
+            href={`${basePath}/Resume.pdf`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary px-6 py-3 text-base flex items-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Download Resume <ArrowRight className="ml-2 h-4 w-4" />
+            Download Resume <FaArrowRight className="ml-2 h-4 w-4" /> {/* Updated icon */}
           </motion.a>
         </div>
       </motion.div>

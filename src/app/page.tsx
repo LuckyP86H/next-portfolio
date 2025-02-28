@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // Updated import
 import About from '@/components/sections/About';
 import Portfolio from '@/components/sections/Portfolio';
 import Contact from '@/components/sections/Contact';
@@ -119,7 +119,7 @@ export default function HomePage() {
               className="fixed left-4 top-1/2 transform -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 dark:bg-dark-card/80 shadow-md hover:bg-white dark:hover:bg-dark-card transition-colors"
               aria-label="Previous section"
             >
-              <ChevronLeft className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+              <FaChevronLeft className="h-6 w-6 text-gray-700 dark:text-gray-300" /> {/* Updated icon */}
             </button>
           )}
           
@@ -129,7 +129,7 @@ export default function HomePage() {
               className="fixed right-4 top-1/2 transform -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 dark:bg-dark-card/80 shadow-md hover:bg-white dark:hover:bg-dark-card transition-colors"
               aria-label="Next section"
             >
-              <ChevronRight className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+              <FaChevronRight className="h-6 w-6 text-gray-700 dark:text-gray-300" /> {/* Updated icon */}
             </button>
           )}
         </>

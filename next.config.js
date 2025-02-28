@@ -1,8 +1,9 @@
-// Update next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  output: 'export',  // Generates static HTML export
+  basePath: process.env.NODE_ENV === 'production' ? '/next-portfolio' : '',
   images: {
+    unoptimized: true, // Required for static export
     remotePatterns: [
       {
         protocol: 'https',
@@ -10,7 +11,8 @@ const nextConfig = {
       },
     ],
   },
-  // in Next.js 14 as App Router is the default
+  // For trailing slashes
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
