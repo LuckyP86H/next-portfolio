@@ -246,11 +246,11 @@ export default function About(props: AboutProps = {}) {
   // Touch handling for swipe
   const [touchStart, setTouchStart] = useState<number | null>(null);
   
-  const handleTouchStart = (e: TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setTouchStart(e.touches[0].clientY);
   };
   
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     if (!touchStart || isTransitioning) return;
     
     const touchY = e.touches[0].clientY;
