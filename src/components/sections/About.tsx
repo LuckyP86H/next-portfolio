@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import type { KeyboardEvent, WheelEvent, TouchEvent } from 'react';
 import Image from 'next/image';
 import { FaFileDownload, FaArrowUp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +9,13 @@ import * as d3 from 'd3';
 
 // Import the simplified chart creator
 import createSimplifiedSkillsChart from '@/utils/createSimplifiedSkillsChart';
+
+// Add these type declarations if needed
+declare global {
+  interface Window {
+    KeyboardEvent: typeof KeyboardEvent;
+  }
+}
 
 // Updated skills data - keeping the same data structure
 const skills = [
@@ -96,14 +102,26 @@ interface AboutProps {
 
 export default function About(props: AboutProps = {}) {
   const { onSectionChange } = props;
-  const svgRef = useRef(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   
+  interface TooltipContent {
+    visible: boolean;
+    skill: {
+      name: string;
+      level: number;
+      category: string;
+      description: string;
+    } | null;
+    x: number;
+    y: number;
+  }
+
   // State for tooltip since we're managing it ourselves
-  const [tooltipContent, setTooltipContent] = useState({
+  const [tooltipContent, setTooltipContent] = useState<TooltipContent>({
     visible: false,
     skill: null,
     x: 0,
@@ -121,7 +139,7 @@ export default function About(props: AboutProps = {}) {
 
   // Keyboard navigation handling
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {  // Add KeyboardEvent type
+    const handleKeyDown = (e: KeyboardEvent) => {  // Remove React type import
       if (isTransitioning) return;
       
       if (e.key === 'ArrowDown' || e.key === 'PageDown') {
@@ -137,7 +155,7 @@ export default function About(props: AboutProps = {}) {
       }
     };
     
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown as EventListener); 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentSection, sections.length, isTransitioning]);
 
@@ -145,7 +163,7 @@ export default function About(props: AboutProps = {}) {
   useEffect(() => {
     // Use a ref to track whether we're handling a wheel event
     let isHandlingWheel = false;
-    let wheelTimer = null;
+    let wheelTimer: NodeJS.Timeout | undefined = undefined;
     
     const handleWheel = (e: WheelEvent) => { // Add WheelEvent type
       if (isTransitioning || isHandlingWheel) return;
@@ -172,7 +190,7 @@ export default function About(props: AboutProps = {}) {
       }, 800); // Slightly longer than transition time
     };
     
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('wheel', handleWheel as EventListener);
     
     // Disable standard scrolling on the page
     document.body.style.overflow = 'hidden';
@@ -201,7 +219,7 @@ export default function About(props: AboutProps = {}) {
     }
   }, [currentSection, selectedCategory]);
 
-  const goToSection = (index) => {
+  const goToSection = (index: number) => {
     if (index >= 0 && index < sections.length && index !== currentSection) {
       setIsTransitioning(true);
       setCurrentSection(index);
@@ -226,13 +244,13 @@ export default function About(props: AboutProps = {}) {
   };
 
   // Touch handling for swipe
-  const [touchStart, setTouchStart] = useState(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
   
-  const handleTouchStart = (e: TouchEvent) => {  // Add TouchEvent type
+  const handleTouchStart = (e: TouchEvent) => {
     setTouchStart(e.touches[0].clientY);
   };
   
-  const handleTouchMove = (e: TouchEvent) => {  // Add TouchEvent type
+  const handleTouchMove = (e: TouchEvent) => {
     if (!touchStart || isTransitioning) return;
     
     const touchY = e.touches[0].clientY;
@@ -256,18 +274,31 @@ export default function About(props: AboutProps = {}) {
   };
 
   // Simplified skills chart component as a fallback
-  const SimpleSkillsChart = ({ skills, selectedCategory, onCategorySelect }) => {
+  interface Skill {
+    name: string;
+    level: number;
+    category: string;
+    description: string;
+  }
+
+  interface SimpleSkillsChartProps {
+    skills: Skill[];
+    selectedCategory: string | null;
+    onCategorySelect: (category: string | null) => void;
+  }
+
+  const SimpleSkillsChart = ({ skills, selectedCategory, onCategorySelect }: SimpleSkillsChartProps) => {
     // Filter skills by category if one is selected
     const filteredSkills = selectedCategory 
       ? skills.filter(skill => skill.category === selectedCategory)
       : skills;
 
     // Get all unique categories
-    const categories = Array.from(new Set(skills.map(skill => skill.category)));
+    const categories = Array.from(new Set(skills.map(skill => skill.category))) as string[];
 
     // Color mapping for categories
-    const getCategoryColor = (category) => {
-      const colorMap = {
+    const getCategoryColor = (category: string): string => {
+      const colorMap: Record<string, string> = {
         'Languages': '#3b82f6',
         'Frameworks': '#f97316',
         'Frontend': '#ef4444',
@@ -444,7 +475,7 @@ export default function About(props: AboutProps = {}) {
     }, [currentSection]);
     
     // Handle category selection
-    const handleCategorySelect = (category) => {
+    const handleCategorySelect = (category: string | null) => {
       setSelectedCategory(category);
     };
 
