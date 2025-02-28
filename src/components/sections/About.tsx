@@ -93,7 +93,8 @@ interface AboutProps {
   onSectionChange?: (sectionIndex: number) => void;
 }
 
-export default function About() {
+export default function About(props: AboutProps = {}) {
+  const { onSectionChange } = props;
   const svgRef = useRef(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentSection, setCurrentSection] = useState(0);
@@ -204,8 +205,8 @@ export default function About() {
       setIsTransitioning(true);
       setCurrentSection(index);
       
-      // Notify parent component of section change
-      if (onSectionChange) {
+      // Notify parent component of section change if the callback exists
+      if (typeof onSectionChange === 'function') {
         onSectionChange(index);
       }
       

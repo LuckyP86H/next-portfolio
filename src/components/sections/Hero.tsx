@@ -37,12 +37,7 @@ export default function Hero() {
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <motion.a
-            href="#about"
-            onClick={(e) => {
-              e.preventDefault();
-              const aboutButton = document.querySelector('button[aria-label="Go to About section"]') as HTMLButtonElement;
-              aboutButton?.click();
-            }}
+            href="/about"
             className="btn btn-primary px-6 py-3 text-base"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
