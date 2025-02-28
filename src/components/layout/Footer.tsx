@@ -15,10 +15,10 @@ export default function Footer() {
           </div>
           
           <div className="flex space-x-4">
-            <SocialLink href="https://github.com/yourusername" icon={<Github size={18} />} label="GitHub" />
-            <SocialLink href="https://linkedin.com/in/yourusername" icon={<Linkedin size={18} />} label="LinkedIn" />
-            <SocialLink href="https://twitter.com/yourusername" icon={<Twitter size={18} />} label="Twitter" />
-            <SocialLink href="mailto:your.email@example.com" icon={<Mail size={18} />} label="Email" />
+            <SocialLink href="https://github.com/LuckyP86H" icon={<Github size={18} />} label="GitHub" />
+            <SocialLink href="https://linkedin.com/in/paul-xu" icon={<Linkedin size={18} />} label="LinkedIn" />
+            <SocialLink href="https://x.com/PaulLovesCoding" icon={<Twitter size={18} />} label="Twitter" />
+            <SocialLink href="mailto:paulxu155@gmail.com" icon={<Mail size={18} />} label="Email" />
           </div>
         </div>
       </div>
