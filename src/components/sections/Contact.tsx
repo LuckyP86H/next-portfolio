@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MailIcon, Phone, MapPin, Send, Check, AlertCircle } from 'lucide-react';
+import { FaEnvelope, FaPhone, FaLocationDot, FaPaperPlane, FaCheck, FaCircleExclamation } from 'react-icons/fa6';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -111,7 +111,7 @@ export default function Contact() {
           <div className="space-y-6 mx-auto md:mx-0 max-w-xs md:max-w-none">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
-                <MailIcon className="h-6 w-6" />
+                <FaEnvelope className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-medium">Email</h4>
@@ -121,7 +121,7 @@ export default function Contact() {
             
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
-                <Phone className="h-6 w-6" />
+                <FaPhone className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-medium">Phone</h4>
@@ -131,7 +131,7 @@ export default function Contact() {
             
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 dark:text-primary-400">
-                <MapPin className="h-6 w-6" />
+                <FaLocationDot className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-medium">Location</h4>
@@ -215,20 +215,20 @@ export default function Contact() {
               >
                 {formStatus === 'idle' && (
                   <span className="flex items-center justify-center">
-                    <Send className="h-4 w-4 mr-2" />
+                    <FaPaperPlane className="h-4 w-4 mr-2" />
                     Send Message
                   </span>
                 )}
                 {formStatus === 'submitting' && 'Sending...'}
                 {formStatus === 'success' && (
                   <span className="flex items-center justify-center">
-                    <Check className="h-4 w-4 mr-2" />
+                    <FaCheck className="h-4 w-4 mr-2" />
                     Message Sent!
                   </span>
                 )}
                 {formStatus === 'error' && (
                   <span className="flex items-center justify-center">
-                    <AlertCircle className="h-4 w-4 mr-2" />
+                    <FaCircleExclamation className="h-4 w-4 mr-2" />
                     Error Sending
                   </span>
                 )}

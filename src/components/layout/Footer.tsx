@@ -1,7 +1,7 @@
 'use client';
 
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
 import Link from 'next/link';
+import { FaGithub, FaLinkedin, FaXTwitter, FaEnvelope } from 'react-icons/fa6';
 
 export default function Footer() {
   return (
@@ -14,11 +14,12 @@ export default function Footer() {
             </p>
           </div>
           
+          
           <div className="flex space-x-4">
-            <SocialLink href="https://github.com/LuckyP86H" icon={<Github size={18} />} label="GitHub" />
-            <SocialLink href="https://linkedin.com/in/paul-xu" icon={<Linkedin size={18} />} label="LinkedIn" />
-            <SocialLink href="https://x.com/PaulLovesCoding" icon={<Twitter size={18} />} label="Twitter" />
-            <SocialLink href="mailto:paulxu155@gmail.com" icon={<Mail size={18} />} label="Email" />
+            <SocialLink href="https://github.com/LuckyP86H" icon={<FaGithub size={18} />} label="GitHub" />
+            <SocialLink href="https://linkedin.com/in/paul-xu" icon={<FaLinkedin size={18} />} label="LinkedIn" />
+            <SocialLink href="https://twitter.com/PaulLovesCoding" icon={<FaXTwitter size={18} />} label="X (Twitter)" />
+            <SocialLink href="mailto:paulxu155@gmail.com" icon={<FaEnvelope size={18} />} label="Email" />
           </div>
         </div>
       </div>

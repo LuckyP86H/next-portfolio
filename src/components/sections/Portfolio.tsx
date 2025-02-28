@@ -3,14 +3,16 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, X } from 'lucide-react';
+import { FaExternalLinkAlt, FaGithub, FaTimes } from 'react-icons/fa'; // Updated import
+
+const basePath = process.env.NODE_ENV === 'production' ? '/next-portfolio' : '';
 
 const projects = [
   {
     id: 'letter-guess',
     title: 'Letter Guess Game',
     description: 'A fun letter guessing game built with vanilla JavaScript.',
-    image: '/assets/images/letter_guess.jpg',
+    image: `${basePath}/assets/images/letter_guess.jpg`,
     technologies: ['JavaScript', 'HTML', 'CSS'],
     githubUrl: 'https://github.com/LuckyP86H/Letter-Guess-Game',
     liveUrl: 'https://luckyp86h.github.io/Letter-Guess-Game',
@@ -20,7 +22,7 @@ const projects = [
     id: 'crystal-collector',
     title: 'Crystal Collector Game',
     description: 'Interactive number-matching game with crystals.',
-    image: '/assets/images/crystal_collector.png',
+    image: `${basePath}/assets/images/crystal_collector.png`,
     technologies: ['JavaScript', 'jQuery', 'Bootstrap'],
     githubUrl: 'https://github.com/LuckyP86H/Crystal-Collector',
     liveUrl: 'https://luckyp86h.github.io/Crystal-Collector',
@@ -30,7 +32,7 @@ const projects = [
     id: 'trivia-game',
     title: 'Trivia Game',
     description: 'A timed trivia quiz with multiple-choice questions.',
-    image: '/assets/images/trivia.jpg',
+    image: `${basePath}/assets/images/trivia.jpg`,
     technologies: ['JavaScript', 'jQuery', 'Responsive Design'],
     githubUrl: 'https://github.com/LuckyP86H/Trivia-Game',
     liveUrl: 'https://luckyp86h.github.io/Trivia-Game',
@@ -40,7 +42,7 @@ const projects = [
     id: 'gif-tastic',
     title: 'Dynamic GIF Page',
     description: 'A web app that fetches and displays GIFs from GIPHY API.',
-    image: '/assets/images/gif_tastic.jpg',
+    image: `${basePath}/assets/images/gif_tastic.jpg`,
     technologies: ['JavaScript', 'AJAX', 'API Integration'],
     githubUrl: 'https://github.com/LuckyP86H/Gif-Tastic-Dynamic',
     liveUrl: 'https://luckyp86h.github.io/Gif-Tastic-Dynamic',
@@ -50,7 +52,7 @@ const projects = [
     id: 'ill-hue-minate',
     title: 'ill-HUE-minate',
     description: 'Color palette generator and visualization tool.',
-    image: '/assets/images/ill_HUE_minate.jpg',
+    image: `${basePath}/assets/images/ill_HUE_minate.jpg`,
     technologies: ['JavaScript', 'Canvas API', 'Color Theory'],
     githubUrl: 'https://github.com/LuckyP86H/illHUEminate',
     liveUrl: 'https://luckyp86h.github.io/illHUEminate/',
@@ -163,7 +165,7 @@ export default function Portfolio() {
                   className="absolute top-2 right-2 p-1 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
                   aria-label="Close"
                 >
-                  <X className="h-5 w-5" />
+                  <FaTimes className="h-5 w-5" /> {/* Updated icon */}
                 </button>
               </div>
               
@@ -190,7 +192,7 @@ export default function Portfolio() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors"
                   >
-                    <Github className="h-4 w-4" />
+                    <FaGithub className="h-4 w-4" /> {/* Updated icon */}
                     Repository
                   </a>
                   <a 
@@ -199,7 +201,7 @@ export default function Portfolio() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <FaExternalLinkAlt className="h-4 w-4" /> {/* Updated icon */}
                     Live Demo
                   </a>
                 </div>
