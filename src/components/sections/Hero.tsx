@@ -37,7 +37,7 @@ export default function Hero() {
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <motion.a
-            href="/about"
+            href={`${basePath}/about`}
             className="btn btn-primary px-6 py-3 text-base"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
