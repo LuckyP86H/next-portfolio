@@ -36,14 +36,15 @@ export default function Hero() {
           Welcome to my portfolio!
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <motion.a
-            href={`${basePath}/about`}
-            className="btn btn-primary px-6 py-3 text-base"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Learn More About Me
-          </motion.a>
+          <Link href="/about" passHref>
+            <motion.div
+              className="btn btn-primary px-6 py-3 text-base cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Learn More About Me
+            </motion.div>
+          </Link>
           <motion.a
             href={`${basePath}/Resume.pdf`}
             target="_blank"
