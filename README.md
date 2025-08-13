@@ -21,7 +21,7 @@ This is a modern portfolio site built with Next.js, TypeScript, Tailwind CSS, an
 ├── public/
 │   ├── assets/
 │   │   └── images/
-│   └── Resume.pdf
+│   └── *
 ├── src/
 │   ├── app/
 │   │   ├── about/
