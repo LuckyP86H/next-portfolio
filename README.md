@@ -1,102 +1,145 @@
 # Modern Portfolio
 
-This is a modern portfolio site built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.
+A modern portfolio site built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
 
-## Features
+## Quick Start
 
-- **Next.js 14** with App Router for optimized page loading and SEO
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **Framer Motion** for smooth animations
-- **D3.js** for data visualization
-- **Dark/Light mode** support
-- **Responsive design** for all device sizes
-- **Horizontal swipe navigation** for sections
-- **Modern UI components** with animations
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Open http://localhost:3000 in your browser
+```
+
+## Tech Stack
+
+- **Next.js 14** - App Router, SSR, optimized performance
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **D3.js** - Data visualization (skills chart)
+- **Playwright** - E2E testing
 
 ## Project Structure
 
 ```
-.
-├── public/
-│   ├── assets/
-│   │   └── images/
-│   └── *
+next-portfolio/
 ├── src/
-│   ├── app/
-│   │   ├── about/
-│   │   ├── contact/
-│   │   ├── portfolio/
-│   │   ├── layout.tsx
-│   │   └── page.tsx
-│   ├── components/
-│   │   ├── layout/
-│   │   ├── sections/
-│   │   └── ui/
-│   ├── content/
-│   │   └── aboutMe.ts
-│   ├── styles/
-│   │   └── globals.css
-│   └── ThemeProvider.tsx
-├── .eslintrc.json
-├── next.config.js
-├── package.json
-├── postcss.config.js
-├── tailwind.config.js
-└── tsconfig.json
+│   ├── app/              # Next.js App Router pages
+│   ├── components/       # React components
+│   │   ├── layout/       # Header, Footer, ThemeProvider
+│   │   ├── sections/     # Page sections (Hero, About, etc.)
+│   │   └── ui/           # Reusable UI components
+│   ├── content/          # Static data (skills, about)
+│   ├── lib/              # Business logic & utilities
+│   │   └── visualization/ # D3 charts
+│   └── types/            # TypeScript type definitions
+├── tests/                # E2E tests with Playwright
+├── config/               # Configuration files
+├── tools/                # Development tools (Nx, Madge)
+├── scripts/              # Build & validation scripts
+└── public/               # Static assets
 ```
 
-## Getting Started
-
-1. Clone this repository
-2. Install dependencies:
+## Development Commands
 
 ```bash
-npm install
+# Development
+npm run dev              # Start dev server (localhost:3000)
+npm run build            # Build for production
+npm run start            # Start production server
+
+# Testing
+npm test                 # Run E2E tests
+npm run test:ui          # Run tests with UI mode
+npm run test:headed      # Run tests with visible browser
+
+# Code Quality
+npm run lint             # Run ESLint
+
+# Dependency Visualization
+npm run dep-graph        # Generate Nx dependency graph
+npm run serve:tools      # Serve tools at localhost:8000
 ```
 
-3. Run the development server:
+## Testing
+
+E2E tests are located in `tests/e2e/`. Tests run automatically in CI/CD before deployment.
 
 ```bash
-npm run dev
+# Install Playwright browsers (first time only)
+npx playwright install
+
+# Run all tests
+npm test
+
+# Run specific test
+npx playwright test tests/e2e/home.spec.ts
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+See [tests/README.md](tests/README.md) for more details.
 
-## Migration from Original Portfolio
+## Validate Before Push
 
-This project is a migration from a React-based portfolio to a modern Next.js application. Key upgrades include:
-
-1. **Framework**: Migrated from Create React App to Next.js for better performance and SEO
-2. **Styling**: Shifted from React-Bootstrap to Tailwind CSS for more flexibility and faster development
-3. **TypeScript**: Added TypeScript for better type safety and developer experience
-4. **Dark Mode**: Implemented a dark/light theme toggle using next-themes
-5. **Animations**: Enhanced with Framer Motion for smooth transitions and interactions
-6. **Responsive Design**: Improved mobile responsiveness with Tailwind's utility classes
-7. **Data Visualization**: Added D3.js for skills visualization
-8. **Navigation**: Added horizontal swipe navigation for a modern UX
-
-## Build for Production
+Ensure your changes will pass CI/CD:
 
 ```bash
-npm run build
+./scripts/validate-ci.sh
 ```
+
+This runs the same checks as GitHub Actions:
+1. Install dependencies
+2. Install Playwright browsers
+3. Run all tests
+4. Build application
+5. Verify output
+
+See [scripts/README.md](scripts/README.md) for more options including using `act`.
+
+## Dependency Visualization
+
+View project dependencies using Nx or Madge:
+
+```bash
+# Generate and view Nx dependency graph
+npm run dep-graph
+
+# Or serve tools directory and open in browser
+npm run serve:tools
+# Open http://localhost:8000/nx/nx-dep-graph.html
+# Open http://localhost:8000/nx/madge-deps.html
+```
+
+See [tools/README.md](tools/README.md) for more details.
 
 ## Deployment
 
-This application can be deployed to any platform that supports Next.js, such as Vercel, Netlify, or AWS.
+Deploys automatically to GitHub Pages when pushing to `main` branch.
 
-For Vercel deployment (recommended):
+**CI/CD Pipeline:**
+1. ✅ Run E2E tests (must pass)
+2. ✅ Build Next.js site (must succeed)
+3. ✅ Deploy to GitHub Pages
 
+Manual deployment:
 ```bash
-npm install -g vercel
-vercel
+npm run build
+npm run export
 ```
 
-## Dependency graph (Nx)
+## Features
 
-We added a minimal Nx setup to visualize project dependencies without restructuring the repo. See `README.nx.md` for quick usage and commands to generate the interactive graph (`npm run dep-graph`).
+- ✅ Dark/Light mode toggle
+- ✅ Responsive design
+- ✅ Smooth animations
+- ✅ Interactive skills visualization
+- ✅ SEO optimized
+- ✅ Type-safe with TypeScript
+- ✅ E2E tested with Playwright
 
 ## License
 
-This project is licensed under the MIT License.
+MIT

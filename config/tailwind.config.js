@@ -1,10 +1,9 @@
 /**
- * Canonical Tailwind config (TypeScript + type-safe)
- * Root tailwind.config.js imports and re-exports this for runtime
+ * Canonical Tailwind config
+ * Shared configuration imported by root tailwind.config.js
  */
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -62,5 +61,3 @@ const config: Config = {
   },
   plugins: [],
 };
-
-export default config;

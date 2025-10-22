@@ -11,8 +11,9 @@
     "nx": "nx",
     "dep-graph": "nx graph",
     "serve:tools": "python3 -m http.server 8000 --directory tools",
-    "test:playwright": "playwright test --config=tests/playwright.config.ts",
-    "test:e2e": "playwright test --config=tests/playwright/playwright.config.ts"
+    "test": "playwright test --config=tests/playwright.config.ts",
+    "test:ui": "playwright test --config=tests/playwright.config.ts --ui",
+    "test:headed": "playwright test --config=tests/playwright.config.ts --headed"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",

@@ -1,0 +1,7 @@
+{
+  "name": "lib",
+  "root": "src/lib",
+  "sourceRoot": "src/lib",
+  "projectType": "library",
+  "targets": {}
+}

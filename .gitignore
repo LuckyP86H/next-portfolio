@@ -56,3 +56,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Generated tool outputs
+/tools/nx/nx-dep-graph.html
+/tools/nx/static/
