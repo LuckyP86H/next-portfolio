@@ -10,7 +10,8 @@
     "export": "next export",
     "nx": "nx",
     "dep-graph": "nx graph",
-    "serve:tools": "python3 -m http.server 8000 --directory tools"
+    "serve:tools": "python3 -m http.server 8000 --directory tools",
+    "test:playwright": "playwright test"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@nrwl/next": "^19.8.4",
+    "@playwright/test": "^1.56.1",
     "@types/d3": "^7.4.3",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.47",

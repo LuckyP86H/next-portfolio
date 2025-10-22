@@ -1,4 +1,9 @@
-# Madge file-level dependency viewer
+This folder contains developer tooling and generated assets used for project visualization and tests.
+
+- `static/` : trimmed copies of generated static assets used by the Nx dep graph viewer. Keep these only for local viewing.
+- `playwright.config.js` : Playwright config for running end-to-end smoke tests locally.
+
+If you want to regenerate the dep graph or static bundle, run `npm run dep-graph` or your NX commands. These files were moved to keep the repository root clean.# Madge file-level dependency viewer
 
 This folder contains the JSON output from `madge` and a small interactive D3 viewer.
 

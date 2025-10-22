@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { FaFileDownload, FaArrowUp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from '@components/ui/Button';
 // Import D3 more explicitly to ensure it loads
 import * as d3 from 'd3';
 
@@ -139,9 +140,9 @@ export default function About(props: AboutProps = {}) {
 
   // Keyboard navigation handling
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {  // Remove React type import
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (isTransitioning) return;
-      
+
       if (e.key === 'ArrowDown' || e.key === 'PageDown') {
         e.preventDefault();
         if (currentSection < sections.length - 1) {
@@ -154,9 +155,9 @@ export default function About(props: AboutProps = {}) {
         }
       }
     };
-    
-    window.addEventListener('keydown', handleKeyDown as EventListener); 
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    window.addEventListener('keydown', handleKeyDown as EventListener);
+    return () => window.removeEventListener('keydown', handleKeyDown as EventListener);
   }, [currentSection, sections.length, isTransitioning]);
 
   // Handle window resize and wheel events
@@ -202,21 +203,28 @@ export default function About(props: AboutProps = {}) {
     };
   }, [currentSection, sections.length, isTransitioning]);
 
-  // Create D3 chart when skills section is active
+  // Create D3 chart when skills section is active (responsive)
   useEffect(() => {
-    if (currentSection === 1 && svgRef.current) {
-      // Define color scale for categories
-      const colorScale = d3.scaleOrdinal()
-        .domain(['Languages', 'Frameworks', 'Frontend', 'Data', 'Build & Ops', 'Cloud'])
-        .range(['#3b82f6', '#f97316', '#ef4444', '#10b981', '#8b5cf6', '#6366f1']);
-      
-      // Attempt to create the chart after a delay
-      const timer = setTimeout(() => {
-        createSimplifiedSkillsChart(svgRef, skills, selectedCategory, colorScale, setTooltipContent);
-      }, 500);
-      
-      return () => clearTimeout(timer);
-    }
+    if (currentSection !== 1 || !svgRef.current) return;
+
+    const colorScale = d3.scaleOrdinal()
+      .domain(['Languages', 'Frameworks', 'Frontend', 'Data', 'Build & Ops', 'Cloud'])
+      .range(['#3b82f6', '#f97316', '#ef4444', '#10b981', '#8b5cf6', '#6366f1']);
+
+    // Pass the React setter directly; the chart now emits container-relative coords via d3.pointer
+    createSimplifiedSkillsChart(svgRef, skills, selectedCategory, colorScale, setTooltipContent);
+
+    // Observe container size and redraw on changes
+    const container = svgRef.current.parentElement ?? svgRef.current;
+    const ro = new ResizeObserver(() => {
+      if (!svgRef.current) return;
+      // remove previous contents
+      while (svgRef.current.firstChild) svgRef.current.removeChild(svgRef.current.firstChild);
+      createSimplifiedSkillsChart(svgRef, skills, selectedCategory, colorScale, setTooltipContent);
+    });
+    ro.observe(container);
+
+    return () => ro.disconnect();
   }, [currentSection, selectedCategory]);
 
   const goToSection = (index: number) => {
@@ -289,9 +297,14 @@ export default function About(props: AboutProps = {}) {
 
   const SimpleSkillsChart = ({ skills, selectedCategory, onCategorySelect }: SimpleSkillsChartProps) => {
     // Filter skills by category if one is selected
-    const filteredSkills = selectedCategory 
+    const filteredSkillsAll = selectedCategory 
       ? skills.filter(skill => skill.category === selectedCategory)
       : skills;
+
+    // collapsed view shows a limited set to avoid large vertical lists
+    const [expanded, setExpanded] = useState(false);
+    const visibleLimit = 6;
+    const filteredSkills = expanded ? filteredSkillsAll : filteredSkillsAll.slice(0, visibleLimit);
 
     // Get all unique categories
     const categories = Array.from(new Set(skills.map(skill => skill.category))) as string[];
@@ -367,6 +380,16 @@ export default function About(props: AboutProps = {}) {
             </div>
           </div>
         ))}
+        {filteredSkillsAll.length > visibleLimit && (
+          <div className="text-center mt-4">
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-sm text-primary-600 dark:text-primary-400 underline"
+            >
+              {expanded ? 'Show less' : `Show all ${filteredSkillsAll.length} skills`}
+            </button>
+          </div>
+        )}
       </div>
     );
   };
@@ -400,17 +423,10 @@ export default function About(props: AboutProps = {}) {
               Software Engineer
             </h2>
             <div className="flex justify-center md:justify-start">
-              <motion.a
-                href={`${basePath}/Resume.pdf`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 rounded-md bg-primary-600 hover:bg-primary-700 text-white transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <Button href={`${basePath}/Resume.pdf`} variant="primary">
                 <FaFileDownload className="mr-2 h-4 w-4" />
                 Download Resume
-              </motion.a>
+              </Button>
             </div>
           </div>
         </div>
@@ -486,7 +502,7 @@ export default function About(props: AboutProps = {}) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div className="max-w-4xl w-full mx-auto bg-white dark:bg-dark-card rounded-xl shadow-lg p-6 md:p-10 relative">
+  <div className="max-w-4xl w-full mx-auto bg-white dark:bg-dark-card rounded-xl shadow-lg p-6 md:p-10 relative max-h-[calc(100vh-160px)] overflow-auto">
           <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
             Skills & Expertise
           </h2>
@@ -532,11 +548,12 @@ export default function About(props: AboutProps = {}) {
               {/* Custom tooltip that follows the mouse */}
               {tooltipContent.visible && tooltipContent.skill && (
                 <div 
-                  className="fixed bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg z-50 max-w-xs"
+                  className="absolute bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg z-50 max-w-xs"
                   style={{
-                    left: `${tooltipContent.x + 10}px`,
-                    top: `${tooltipContent.y + 10}px`,
+                    left: `${Math.max(8, tooltipContent.x + 8)}px`,
+                    top: `${Math.max(8, tooltipContent.y + 8)}px`,
                     transform: 'translate(0, -50%)',
+                    maxWidth: 'min(280px, 40%)'
                   }}
                 >
                   <div className="font-bold text-gray-900 dark:text-white">{tooltipContent.skill.name} - {tooltipContent.skill.level}%</div>

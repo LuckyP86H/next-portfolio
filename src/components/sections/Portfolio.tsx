@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Button from '@components/ui/Button';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaExternalLinkAlt, FaGithub, FaTimes } from 'react-icons/fa'; // Updated import
@@ -186,24 +187,14 @@ export default function Portfolio() {
                 </div>
                 
                 <div className="mt-6 flex gap-4">
-                  <a 
-                    href={selectedProject.githubUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors"
-                  >
-                    <FaGithub className="h-4 w-4" /> {/* Updated icon */}
+                  <Button href={selectedProject.githubUrl} variant="secondary">
+                    <FaGithub className="h-4 w-4" />
                     Repository
-                  </a>
-                  <a 
-                    href={selectedProject.liveUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
-                  >
-                    <FaExternalLinkAlt className="h-4 w-4" /> {/* Updated icon */}
+                  </Button>
+                  <Button href={selectedProject.liveUrl} variant="primary">
+                    <FaExternalLinkAlt className="h-4 w-4" />
                     Live Demo
-                  </a>
+                  </Button>
                 </div>
               </div>
             </motion.div>
