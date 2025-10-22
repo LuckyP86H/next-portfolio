@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>File-level dependency graph (madge) — Interactive Viewer</title>
+    <style>
+      html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,Segoe UI,sans-serif}
+      #toolbar{position:fixed;left:12px;top:12px;z-index:10;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+      #search{width:260px;padding:6px 8px;border:1px solid #d1d5db;border-radius:6px}
+      #legend{margin-top:8px;font-size:13px;color:#374151}
+      #chart{width:100%;height:100%}
+      .node{stroke:#fff;stroke-width:1.25px}
+      .link{stroke:#9ca3af;stroke-opacity:0.6}
+      .tooltip{position:fixed;background:#111827;color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;pointer-events:none;z-index:20}
+    </style>
+  </head>
+  <body>
+    <div id="toolbar">
+      <input id="search" placeholder="Search file path (type & press Enter)" />
+      <div id="legend">Drag nodes • scroll to zoom • click node to pin</div>
+    </div>
+    <div id="chart"></div>
+
+    <div id="tooltip" class="tooltip" style="display:none"></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      // Load the madge JSON output (relative path)
+      fetch('madge-deps.json')
+        .then(r => r.json())
+        .then(data => renderGraph(data))
+        .catch(err => {
+          document.getElementById('chart').innerText = 'Failed to load madge-deps.json: ' + err;
+        });
+
+      function renderGraph(madgeJson){
+        // Build nodes and links from madge JSON
+        const nodesMap = new Map();
+        const links = [];
+        Object.keys(madgeJson).forEach(src => {
+          if (!nodesMap.has(src)) nodesMap.set(src, {id: src});
+          madgeJson[src].forEach(tgt => {
+            if (!nodesMap.has(tgt)) nodesMap.set(tgt, {id: tgt});
+            links.push({source: src, target: tgt});
+          });
+        });
+
+        const nodes = Array.from(nodesMap.values());
+
+        // compute degrees
+        const inCount = new Map();
+        const outCount = new Map();
+        nodes.forEach(n=>{inCount.set(n.id,0);outCount.set(n.id,0)});
+        links.forEach(l=>{ outCount.set(l.source, (outCount.get(l.source)||0)+1); inCount.set(l.target, (inCount.get(l.target)||0)+1); });
+        nodes.forEach(n=>{ n.in = inCount.get(n.id)||0; n.out = outCount.get(n.id)||0; n.total = n.in + n.out; });
+
+        // Setup SVG
+        const container = document.getElementById('chart');
+        const width = container.clientWidth || window.innerWidth;
+        const height = container.clientHeight || window.innerHeight;
+        const svg = d3.select('#chart').append('svg').attr('width','100%').attr('height','100%').attr('viewBox',`0 0 ${width} ${height}`)
+          .call(d3.zoom().scaleExtent([0.1,8]).on('zoom', (event)=>{g.attr('transform', event.transform);}));
+
+        const g = svg.append('g');
+
+        const link = g.append('g').attr('stroke-width',1.2).selectAll('line').data(links).join('line').attr('class','link').attr('stroke','#cbd5e1');
+
+        const node = g.append('g').selectAll('g').data(nodes).join('g').attr('class','node-group');
+
+        const radiusScale = d3.scaleSqrt().domain([0, d3.max(nodes, d=>d.total)||1]).range([6,20]);
+
+        const circles = node.append('circle')
+          .attr('class','node')
+          .attr('r', d => Math.max(6, radiusScale(d.total)))
+          .attr('fill', d => d.total > 0 ? '#2563eb' : '#6b7280')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.2)
+          .style('cursor', 'pointer');
+
+        const labels = node.append('text').text(d => d.id.split('/').pop()).attr('x', 12).attr('y', 4).style('font-size','11px').style('fill','#111827');
+
+        // Tooltip
+        const tooltip = d3.select('#tooltip');
+
+        node.on('mouseover', (event,d) => {
+          tooltip.style('display','block').html(`<strong>${d.id}</strong><br/>in: ${d.in} out: ${d.out}`);
+        }).on('mousemove', (event) => {
+          tooltip.style('left',(event.clientX+12)+'px').style('top',(event.clientY+12)+'px');
+        }).on('mouseout', () => tooltip.style('display','none'));
+
+        // drag
+        const simulation = d3.forceSimulation(nodes)
+          .force('link', d3.forceLink(links).id(d=>d.id).distance(80).strength(0.8))
+          .force('charge', d3.forceManyBody().strength(-300))
+          .force('center', d3.forceCenter(width/2, height/2))
+          .force('collide', d3.forceCollide().radius(d=>Math.max(10, radiusScale(d.total)+6)));
+
+        node.call(d3.drag()
+          .on('start', (event,d)=>{ if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+          .on('drag', (event,d)=>{ d.fx = event.x; d.fy = event.y; })
+          .on('end', (event,d)=>{ if (!event.active) simulation.alphaTarget(0); /* keep node pinned on click only */ }));
+
+        node.on('click', (event,d)=>{ d.fx = d.fx == null ? d.x : null; d.fy = d.fy == null ? d.y : null; });
+
+        simulation.on('tick', ()=>{
+          // update positions
+          link.attr('x1', d=>d.source.x).attr('y1', d=>d.source.y).attr('x2', d=>d.target.x).attr('y2', d=>d.target.y);
+          node.attr('transform', d=>`translate(${d.x},${d.y})`);
+        });
+
+        // Resize handling
+        window.addEventListener('resize', ()=>{
+          const w = container.clientWidth || window.innerWidth;
+          const h = container.clientHeight || window.innerHeight;
+          svg.attr('viewBox',`0 0 ${w} ${h}`);
+          simulation.force('center', d3.forceCenter(w/2, h/2));
+          simulation.alpha(0.3).restart();
+        });
+
+        // Search
+        const search = document.getElementById('search');
+        search.addEventListener('keydown', (e)=>{
+          if (e.key === 'Enter') doSearch(search.value.trim());
+        });
+
+        function doSearch(q){
+          if (!q) return;
+          const lower = q.toLowerCase();
+          const found = nodes.find(n => n.id.toLowerCase().includes(lower));
+          if (found){
+            // highlight: temporarily enlarge and center view
+            circles.attr('stroke', '#fff').attr('stroke-width',1.2).attr('opacity', 0.3);
+            d3.selectAll('circle').filter(d=>d.id===found.id).attr('opacity',1).attr('stroke','#ffb020').attr('stroke-width',2.5).attr('r', d=>Math.max(10, radiusScale(d.total)+6));
+            // center simulation target
+            simulation.alphaTarget(0.6).restart();
+            found.fx = (container.clientWidth||window.innerWidth)/2; found.fy = (container.clientHeight||window.innerHeight)/2; simulation.tick(120); simulation.alphaTarget(0);
+          } else {
+            alert('No matching file');
+          }
+        }
+
+        // small legend: show counts in console
+        console.log('Madge file-level graph loaded', nodes.length, 'nodes', links.length, 'links');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+{
+  "name": "portfolio",
+  "root": ".",
+  "sourceRoot": "src",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run dev"
+          }
+        ],
+        "cwd": "."
+      }
+    },
+    "build": {
+      "executor": "@nx/next:build",
+      "options": {
+        "outputPath": "dist/apps/portfolio"
+      }
+    },
+    "server": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "portfolio:build",
+        "dev": false
+      }
+    },
+    "build:legacy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run build"
+          }
+        ],
+        "cwd": "."
+      }
+    }
+  }
+  ,
+  "implicitDependencies": [
+    "components",
+    "utils",
+    "content"
+  ]
+}

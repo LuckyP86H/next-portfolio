@@ -1,0 +1,7 @@
+{
+  "name": "utils",
+  "root": "src/utils",
+  "sourceRoot": "src/utils",
+  "projectType": "library",
+  "targets": {}
+}

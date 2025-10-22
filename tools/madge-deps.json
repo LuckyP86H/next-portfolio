@@ -1,0 +1,22 @@
+{
+  "app/about/page.tsx": [],
+  "app/contact/page.tsx": [],
+  "app/globals.css": [],
+  "app/layout.tsx": [
+    "app/globals.css"
+  ],
+  "app/page.tsx": [],
+  "app/portfolio/page.tsx": [],
+  "components/ThemeProvider.tsx": [],
+  "components/layout/Footer.tsx": [],
+  "components/layout/Header.tsx": [
+    "components/ui/ThemeToggle.tsx"
+  ],
+  "components/sections/About.tsx": [],
+  "components/sections/Contact.tsx": [],
+  "components/sections/Hero.tsx": [],
+  "components/sections/Portfolio.tsx": [],
+  "components/ui/ThemeToggle.tsx": [],
+  "content/aboutMe.ts": [],
+  "utils/createSimplifiedSkillsChart.js": []
+}
