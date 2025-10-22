@@ -9,7 +9,7 @@ import Button from '@components/ui/Button';
 import * as d3 from 'd3';
 
 // Import the simplified chart creator
-import createSimplifiedSkillsChart from '@utils/createSimplifiedSkillsChart';
+import createSimplifiedSkillsChart from '@lib/visualization/skills-radar';
 
 // Add these type declarations if needed
 declare global {

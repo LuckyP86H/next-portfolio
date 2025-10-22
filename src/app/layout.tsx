@@ -2,7 +2,7 @@
 
 import { Inter, Fira_Code } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@components/ThemeProvider';
+import { ThemeProvider } from '@components/layout/ThemeProvider';
 import Header from '@components/layout/Header';
 import Footer from '@components/layout/Footer';
 

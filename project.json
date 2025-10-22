@@ -43,7 +43,7 @@
   ,
   "implicitDependencies": [
     "components",
-    "utils",
+    "lib",
     "content"
   ]
 }
