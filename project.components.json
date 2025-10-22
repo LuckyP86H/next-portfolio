@@ -1,0 +1,7 @@
+{
+  "name": "components",
+  "root": "src/components",
+  "sourceRoot": "src/components",
+  "projectType": "library",
+  "targets": {}
+}

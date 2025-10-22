@@ -93,6 +93,10 @@ npm install -g vercel
 vercel
 ```
 
+## Dependency graph (Nx)
+
+We added a minimal Nx setup to visualize project dependencies without restructuring the repo. See `README.nx.md` for quick usage and commands to generate the interactive graph (`npm run dep-graph`).
+
 ## License
 
 This project is licensed under the MIT License.

@@ -1,4 +1,4 @@
-import Contact from '@/components/sections/Contact';
+import Contact from '@components/sections/Contact';
 
 export const metadata = {
   title: 'Contact | Paul Xu - Software Engineer',

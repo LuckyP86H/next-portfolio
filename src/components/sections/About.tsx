@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import * as d3 from 'd3';
 
 // Import the simplified chart creator
-import createSimplifiedSkillsChart from '@/utils/createSimplifiedSkillsChart';
+import createSimplifiedSkillsChart from '@utils/createSimplifiedSkillsChart';
 
 // Add these type declarations if needed
 declare global {

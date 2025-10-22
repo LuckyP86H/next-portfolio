@@ -1,4 +1,4 @@
-import About from '@/components/sections/About';
+import About from '@components/sections/About';
 
 export const metadata = {
   title: 'About Me | Paul Xu - Software Engineer',

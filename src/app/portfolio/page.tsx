@@ -1,4 +1,4 @@
-import Portfolio from '@/components/sections/Portfolio';
+import Portfolio from '@components/sections/Portfolio';
 
 export const metadata = {
   title: 'Portfolio | Paul Xu - Software Engineer',
