@@ -34,17 +34,19 @@ export default function Header() {
   }, []);
 
   return (
-    <header 
+    <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/80 dark:bg-dark-card/80 backdrop-blur-md shadow-md' 
+        scrolled
+          ? 'bg-white/80 dark:bg-dark-card/80 backdrop-blur-md shadow-md'
           : 'bg-white dark:bg-dark-background'
       }`}
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center gap-3">
+            <div className="w-8 h-8 rounded-md bg-primary-500" aria-hidden />
+            <span className="font-medium text-lg text-gray-800 dark:text-white">Paul Xu</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -82,13 +84,14 @@ export default function Header() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-expanded="false"
+              aria-expanded={isOpen}
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
             >
-              <span className="sr-only">Open main menu</span>
+              <span className="sr-only">Toggle main menu</span>
               {isOpen ? (
-                <FaTimes className="block h-6 w-6" aria-hidden="true" /> // Updated icon
+                <FaTimes className="block h-6 w-6" aria-hidden="true" />
               ) : (
-                <FaBars className="block h-6 w-6" aria-hidden="true" /> // Updated icon
+                <FaBars className="block h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>

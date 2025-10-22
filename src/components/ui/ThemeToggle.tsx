@@ -2,55 +2,36 @@
 
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { FaSun, FaMoon } from 'react-icons/fa6';
+import { FaSun, FaMoon } from 'react-icons/fa';
 
 export default function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Log theme changes for debugging
-  useEffect(() => {
-    if (mounted) {
-      console.log('Current theme:', theme);
-      console.log('Resolved theme:', resolvedTheme);
-    }
-  }, [theme, resolvedTheme, mounted]);
-
-  // Ensure it only runs on client side to avoid hydration mismatch
+  // Only render toggle on client to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return <div className="w-5 h-5" />; // Placeholder with same dimensions
+    return <div className="w-6 h-6" />;
   }
 
-  // Force direct manipulation of the class if needed
-  const forceThemeToggle = () => {
-    const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-    
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    
-    // Also update next-themes state
-    setTheme(newTheme);
-    
-    console.log('Toggled to:', newTheme);
+  const toggle = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   return (
     <button
-      onClick={forceThemeToggle}
-      className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      onClick={toggle}
       aria-label="Toggle theme"
+      aria-pressed={resolvedTheme === 'dark'}
+      className="inline-flex items-center justify-center w-9 h-9 rounded-full transition-shadow shadow-sm hover:shadow-md bg-white/90 dark:bg-slate-800/90 text-slate-800 dark:text-yellow-300 ring-1 ring-slate-100 dark:ring-slate-700"
     >
       {resolvedTheme === 'dark' ? (
         <FaSun className="h-5 w-5 text-yellow-300" />
       ) : (
-        <FaMoon className="h-5 w-5 text-slate-700" />
+        <FaMoon className="h-5 w-5" />
       )}
     </button>
   );

@@ -1,4 +1,34 @@
-# Madge file-level dependency viewer
+This folder contains developer tooling and generated assets used for project visualization and tests.
+
+Nx Quick Usage — dependency graph
+
+1. Install dependencies (already done):
+
+   npm install
+
+2. Open interactive dependency graph:
+
+   npm run dep-graph
+
+   This will start or generate an interactive graph. You can also run:
+
+   npx nx graph
+
+3. Run Nx targets for the app:
+
+   npx nx run portfolio:dev
+   npx nx run portfolio:build
+   npx nx run portfolio:server
+
+Notes:
+- We initialized Nx in minimal mode and added `project.json` pointing at your existing `src` directory. This is intentionally non-destructive to make future migration to an Nx layout simple.
+- To migrate to a full Nx monorepo layout later, install `@nrwl/next` (already added) and run the recommended generators.
+
+
+- `static/` : trimmed copies of generated static assets used by the Nx dep graph viewer. Keep these only for local viewing.
+- `playwright.config.js` : Playwright config for running end-to-end smoke tests locally.
+
+If you want to regenerate the dep graph or static bundle, run `npm run dep-graph` or your NX commands. These files were moved to keep the repository root clean.# Madge file-level dependency viewer
 
 This folder contains the JSON output from `madge` and a small interactive D3 viewer.
 

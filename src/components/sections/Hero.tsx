@@ -1,7 +1,8 @@
-'use client';
+ 'use client';
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Button from '@components/ui/Button';
 import { FaArrowRight } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import Typewriter from 'typewriter-effect'; // Updated import
@@ -36,25 +37,11 @@ export default function Hero() {
           Welcome to my portfolio!
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <Link href="/about" passHref>
-            <motion.div
-              className="btn btn-primary px-6 py-3 text-base cursor-pointer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Learn More About Me
-            </motion.div>
-          </Link>
-          <motion.a
-            href={`${basePath}/Resume.pdf`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-secondary px-6 py-3 text-base flex items-center"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Download Resume <FaArrowRight className="ml-2 h-4 w-4" />
-          </motion.a>
+          <Button href="/about" variant="primary">Learn More About Me</Button>
+
+          <Button href={`${basePath}/Resume.pdf`} variant="secondary">
+            Download Resume <FaArrowRight className="ml-1 h-4 w-4" />
+          </Button>
         </div>
       </motion.div>
     </div>
