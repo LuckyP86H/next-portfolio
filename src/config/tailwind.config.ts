@@ -1,10 +1,10 @@
 /**
- * Runtime Tailwind config wrapper.
- * Canonical config is in src/config/tailwind.config.ts (TypeScript).
- * This file exists for PostCSS/Tailwind resolution at build/dev time.
+ * Canonical Tailwind config (TypeScript + type-safe)
+ * Root tailwind.config.js imports and re-exports this for runtime
  */
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
   darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -62,3 +62,5 @@ module.exports = {
   },
   plugins: [],
 };
+
+export default config;
