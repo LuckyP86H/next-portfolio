@@ -1,20 +1,26 @@
-'use client';
-
-import { Inter, Fira_Code } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Fira_Code } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@components/layout/ThemeProvider';
 import Header from '@components/layout/Header';
 import Footer from '@components/layout/Footer';
 
-const inter = Inter({ 
+const firaCode = Fira_Code({
   subsets: ['latin'],
-  variable: '--font-inter', 
+  variable: '--font-fira-code',
+  display: 'swap',
 });
 
-const firaCode = Fira_Code({ 
-  subsets: ['latin'],
-  variable: '--font-fira-code', 
-});
+export const metadata: Metadata = {
+  title: 'Paul Xu — Software Engineer',
+  description:
+    "Paul Xu's portfolio — backend software engineer working with Java, Spring, Docker, and Kubernetes. A Developer Chic dashboard.",
+};
+
+export const viewport: Viewport = {
+  themeColor: '#000000',
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export default function RootLayout({
   children,
@@ -22,20 +28,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Paul Xu's Portfolio - Software Engineer" />
-        <title>Paul Xu - Software Engineer</title>
-      </head>
-      <body className={`${inter.variable} ${firaCode.variable} font-sans min-h-screen flex flex-col`}>
-        <ThemeProvider>
-          <div className="flex flex-col min-h-screen transition-colors duration-300">
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
-        </ThemeProvider>
+    <html lang="en" className={`dark ${firaCode.variable}`}>
+      <body className="font-mono min-h-screen flex flex-col bg-chic-black text-chic-fg antialiased">
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

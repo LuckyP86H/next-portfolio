@@ -72,4 +72,27 @@ export const skills: Skill[] = [
   }
 ];
 
+/**
+ * Canonical category list (stable insertion order) used to build the filter UI.
+ * Deriving it here keeps the category -> skills mapping in one place so the filter
+ * toggles the correct items.
+ */
+export const skillCategories: string[] = skills.reduce<string[]>((acc, skill) => {
+  if (!acc.includes(skill.category)) acc.push(skill.category);
+  return acc;
+}, []);
+
+/** Neon category colors tuned for high contrast on the pure-black theme. */
+export const categoryColors: Record<string, string> = {
+  Languages: '#00f2ff',
+  Frameworks: '#ff2fb9',
+  Frontend: '#39ff14',
+  Data: '#ffb000',
+  'Build & Ops': '#a970ff',
+  Cloud: '#4d9dff',
+};
+
+export const colorForCategory = (category: string): string =>
+  categoryColors[category] ?? '#8b98a6';
+
 export default skills;

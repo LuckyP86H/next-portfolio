@@ -1,182 +1,173 @@
 import * as d3 from 'd3';
-import { RefObject, Dispatch, SetStateAction } from 'react';
+import type { RefObject } from 'react';
+import type { Skill, TooltipPayload } from '../../types/skills';
 
-type Skill = {
-  name: string;
-  level: number;
-  category: string;
-  description: string;
-};
+/**
+ * Responsive D3 skills radar.
+ *
+ * Geometry is drawn in a FIXED viewBox coordinate space and the SVG is sized with
+ * width:100% + preserveAspectRatio, so it scales uniformly to any container width
+ * without clipping or breaking the layout on mobile. No pixel measurement / ResizeObserver
+ * needed — the browser handles scaling.
+ */
 
-type TooltipPayload = { visible: boolean; skill: Skill | null; x: number; y: number };
+const VIEW_W = 520;
+const VIEW_H = 400;
+const CX = VIEW_W / 2;
+const CY = VIEW_H / 2 + 8;
+const OUTER = 112;
+const INNER = 6;
+const LABEL_R = OUTER + 22;
+const MAX_UNFILTERED = 6;
 
-// Accept either a React state setter (Dispatch<SetStateAction<TooltipPayload>>) or a simple callback
-type TooltipSetter = ((payload: TooltipPayload) => void) | Dispatch<SetStateAction<TooltipPayload>>;
+type TooltipSetter = (payload: TooltipPayload) => void;
 
-const createSimplifiedSkillsChart = (
-  svgRef: RefObject<SVGSVGElement>,
+export function createSkillsRadar(
+  svgRef: RefObject<SVGSVGElement | null>,
   skills: Skill[],
   selectedCategory: string | null,
-  colorScale: any,
-  setTooltipContent?: TooltipSetter
-) => {
+  colorScale: (category: string) => string,
+  setTooltip?: TooltipSetter
+): boolean {
   try {
-    if (!svgRef?.current) return false;
+    const el = svgRef.current;
+    if (!el) return false;
 
-    const svg = d3.select(svgRef.current as any);
+    const svg = d3.select(el);
     svg.selectAll('*').remove();
 
-    let filteredSkills = selectedCategory
-      ? skills.filter((skill) => skill.category === selectedCategory)
+    let data = selectedCategory
+      ? skills.filter((s) => s.category === selectedCategory)
       : skills.slice();
 
-    if (!selectedCategory && filteredSkills.length > 6) {
-      filteredSkills = filteredSkills.sort((a, b) => b.level - a.level).slice(0, 6);
+    if (!selectedCategory && data.length > MAX_UNFILTERED) {
+      data = [...data].sort((a, b) => b.level - a.level).slice(0, MAX_UNFILTERED);
     }
-
-    // Compute sizing from the svg's container so the chart scales responsively.
-  const container = (svgRef.current?.parentElement ?? svgRef.current) as Element;
-  const bbox = container.getBoundingClientRect();
-    const width = Math.max(320, Math.round(bbox.width) || 600);
-    const height = Math.max(240, Math.round(bbox.height) || 400);
-  // Use more compact margins for smaller containers
-  const baseVerticalMargin = Math.round(Math.max(24, height * 0.08));
-  const baseHorizontalMargin = Math.round(Math.max(24, width * 0.08));
-  const margin = { top: baseVerticalMargin, right: baseHorizontalMargin, bottom: baseVerticalMargin, left: baseHorizontalMargin };
-
-  const innerRadius = Math.max(6, Math.round(Math.min(width, height) * 0.02));
-  // Make outer radius respect both width and height but prefer height as limiting factor to avoid overflow
-  const outerRadius = Math.max(26, Math.min((width - margin.left - margin.right) / 2, (height - margin.top - margin.bottom) / 2));
+    if (data.length === 0) return false;
 
     svg
+      .attr('viewBox', `0 0 ${VIEW_W} ${VIEW_H}`)
       .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .style('height', 'auto')
+      .style('max-height', '100%')
       .style('overflow', 'visible');
 
-    const g = svg.append('g').attr('transform', `translate(${width / 2}, ${height / 2})`);
+    const g = svg.append('g').attr('transform', `translate(${CX}, ${CY})`);
+    const n = data.length;
+    const angleAt = (i: number) => (i / n) * 2 * Math.PI - Math.PI / 2; // start at top
+    const rScale = d3.scaleLinear().domain([0, 100]).range([INNER, OUTER]);
 
-    const angleScale = d3.scalePoint().domain(filteredSkills.map((d) => d.name)).range([0, 2 * Math.PI - (2 * Math.PI / filteredSkills.length)]);
-
-    const radiusScale = d3.scaleLinear().domain([0, 100]).range([innerRadius, outerRadius]);
-
-  const ticks = outerRadius > 90 ? [20, 40, 60, 80, 100] : outerRadius > 60 ? [25, 50, 75, 100] : [50, 100];
-    // Draw concentric ticks scaled to outerRadius
-    ticks.forEach((t) => {
+    // Concentric rings + tick labels
+    [25, 50, 75, 100].forEach((t) => {
       g.append('circle')
-        .attr('cx', 0)
-        .attr('cy', 0)
-        .attr('r', radiusScale(t))
+        .attr('r', rScale(t))
         .attr('fill', 'none')
-        .attr('stroke', 'rgba(229, 231, 235, 0.3)')
+        .attr('stroke', 'rgba(0, 242, 255, 0.12)')
         .attr('stroke-width', 1)
-        .attr('stroke-dasharray', '2,2');
-      g.append('text')
-        .attr('x', Math.max(6, innerRadius / 2))
-        .attr('y', -radiusScale(t) + Math.min(6, outerRadius * 0.04))
-        .attr('font-size', Math.max(9, Math.round(outerRadius * 0.06)) + 'px')
-        .attr('fill', 'rgba(156, 163, 175, 0.8)')
-        .attr('text-anchor', 'start')
-        .text(String(t));
+        .attr('stroke-dasharray', '3,3');
     });
 
-    filteredSkills.forEach((skill) => {
-      const angle = typeof angleScale(skill.name) === 'number' ? (angleScale(skill.name) as number) : 0;
-
+    // Spokes
+    data.forEach((_, i) => {
+      const a = angleAt(i);
       g.append('line')
         .attr('x1', 0)
         .attr('y1', 0)
-        .attr('x2', Math.cos(angle - Math.PI / 2) * outerRadius)
-        .attr('y2', Math.sin(angle - Math.PI / 2) * outerRadius)
-        .attr('stroke', 'rgba(229, 231, 235, 0.5)')
+        .attr('x2', Math.cos(a) * OUTER)
+        .attr('y2', Math.sin(a) * OUTER)
+        .attr('stroke', 'rgba(0, 242, 255, 0.12)')
         .attr('stroke-width', 1);
     });
 
-    const line = d3
-      .lineRadial<Skill>()
-      .angle((d) => (angleScale(d.name) as number) - Math.PI / 2)
-      .radius((d) => radiusScale(d.level))
-      .curve((d3 as any).curveCardinalClosed.tension(0.5));
+    // Filled area polygon
+    const points: [number, number][] = data.map((s, i) => {
+      const a = angleAt(i);
+      const r = rScale(s.level);
+      return [Math.cos(a) * r, Math.sin(a) * r];
+    });
+    const areaPath = d3.line().curve(d3.curveLinearClosed)(points);
+    if (areaPath) {
+      g.append('path')
+        .attr('d', areaPath)
+        .attr('fill', 'rgba(0, 242, 255, 0.12)')
+        .attr('stroke', '#00f2ff')
+        .attr('stroke-width', 2)
+        .attr('stroke-linejoin', 'round');
+    }
 
-    g.append('path')
-      .datum(filteredSkills)
-      .attr('d', line as any)
-      .attr('fill', 'rgba(59, 130, 246, 0.15)')
-      .attr('stroke', '#3b82f6')
-      .attr('stroke-width', 2)
-      .attr('stroke-linejoin', 'round');
-
-  const pointRadius = Math.max(3, Math.round(outerRadius * 0.06));
-  const labelRadiusPadding = Math.min(Math.round(Math.max(24, width * 0.06)), Math.round(outerRadius * 0.9));
-
-    filteredSkills.forEach((skill) => {
-      const angle = typeof angleScale(skill.name) === 'number' ? (angleScale(skill.name) as number) : 0;
-      const radius = radiusScale(skill.level);
+    // Data points + labels
+    data.forEach((skill, i) => {
+      const a = angleAt(i);
+      const r = rScale(skill.level);
+      const px = Math.cos(a) * r;
+      const py = Math.sin(a) * r;
+      const color = colorScale(skill.category);
 
       g.append('circle')
-        .attr('cx', Math.cos(angle - Math.PI / 2) * radius)
-        .attr('cy', Math.sin(angle - Math.PI / 2) * radius)
-        .attr('r', pointRadius)
-        .attr('fill', String(colorScale(skill.category)))
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 2)
+        .attr('cx', px)
+        .attr('cy', py)
+        .attr('r', 5)
+        .attr('fill', color)
+        .attr('stroke', '#000000')
+        .attr('stroke-width', 1.5)
         .attr('cursor', 'pointer')
-        .on('mouseover', function (event: any) {
-          d3.select(this).transition().duration(200).attr('r', Math.max(pointRadius + 2, pointRadius * 1.4));
-          if (setTooltipContent) {
-            // Prefer coordinates relative to the svg container so callers can position an absolute tooltip inside the same container
-            const containerEl = (svgRef.current as Element).parentElement ?? svgRef.current;
-            const [cx, cy] = d3.pointer(event, containerEl as any);
-            setTooltipContent({ visible: true, skill, x: Math.round(cx), y: Math.round(cy) });
+        .on('mouseover', function (event: MouseEvent) {
+          d3.select(this).transition().duration(150).attr('r', 7);
+          if (setTooltip) {
+            const parent = (el.parentElement ?? el) as Element;
+            const [mx, my] = d3.pointer(event, parent);
+            setTooltip({ visible: true, skill, x: Math.round(mx), y: Math.round(my) });
           }
         })
         .on('mouseout', function () {
-          d3.select(this).transition().duration(200).attr('r', pointRadius);
-          if (setTooltipContent) setTooltipContent({ visible: false, skill: null, x: 0, y: 0 });
+          d3.select(this).transition().duration(150).attr('r', 5);
+          if (setTooltip) setTooltip({ visible: false, skill: null, x: 0, y: 0 });
         });
 
+      // Level number just inside the point
       g.append('text')
-        .attr('x', Math.cos(angle - Math.PI / 2) * (radius + Math.max(10, outerRadius * 0.05)))
-        .attr('y', Math.sin(angle - Math.PI / 2) * (radius + Math.max(10, outerRadius * 0.05)))
+        .attr('x', Math.cos(a) * (r - 12))
+        .attr('y', Math.sin(a) * (r - 12))
         .attr('text-anchor', 'middle')
-        .attr('font-size', Math.max(10, Math.round(outerRadius * 0.06)) + 'px')
+        .attr('dy', '0.32em')
+        .attr('font-size', '9px')
         .attr('font-weight', '700')
-        .attr('fill', String(colorScale(skill.category)))
+        .attr('fill', color)
         .text(String(skill.level));
 
-  // place labels just outside the outer radius but cap to avoid huge offsets
-  const labelRadius = Math.min(outerRadius + labelRadiusPadding, Math.round(Math.max(outerRadius + 12, height * 0.48)));
-      const labelX = Math.cos(angle - Math.PI / 2) * labelRadius;
-
-      const textAnchor = labelX > 0 ? 'start' : labelX < 0 ? 'end' : 'middle';
-
+      // Skill name outside the ring
+      const lx = Math.cos(a) * LABEL_R;
+      const ly = Math.sin(a) * LABEL_R;
+      const anchor = Math.abs(lx) < 8 ? 'middle' : lx > 0 ? 'start' : 'end';
       g.append('text')
-        .attr('x', labelX)
-        .attr('y', Math.sin(angle - Math.PI / 2) * labelRadius)
-        .attr('dx', textAnchor === 'start' ? Math.min(8, Math.round(width * 0.01)) : textAnchor === 'end' ? -Math.min(8, Math.round(width * 0.01)) : 0)
-        .attr('dy', Math.sin(angle - Math.PI / 2) > 0 ? Math.min(8, Math.round(height * 0.02)) : -Math.min(6, Math.round(height * 0.02)))
-        .attr('text-anchor', textAnchor)
-        .attr('font-size', Math.max(11, Math.round(outerRadius * 0.07)) + 'px')
-        .attr('font-weight', '700')
-        .attr('fill', String(colorScale(skill.category)))
+        .attr('x', lx)
+        .attr('y', ly)
+        .attr('dy', '0.32em')
+        .attr('text-anchor', anchor)
+        .attr('font-size', '11px')
+        .attr('font-weight', '600')
+        .attr('fill', color)
         .text(skill.name);
     });
 
-    svg.append('text')
-      .attr('x', width / 2)
-      .attr('y', Math.max(24, Math.round(margin.top * 0.6)))
+    // Heading
+    svg
+      .append('text')
+      .attr('x', CX)
+      .attr('y', 22)
       .attr('text-anchor', 'middle')
-      .attr('font-size', Math.max(14, Math.round(outerRadius * 0.12)) + 'px')
+      .attr('font-size', '13px')
       .attr('font-weight', '700')
-      .attr('fill', 'currentColor')
-      .text(selectedCategory ? `${selectedCategory} Skills` : 'Top Skills');
+      .attr('fill', '#e6edf3')
+      .text(selectedCategory ? `${selectedCategory} skills` : 'Top skills');
 
     return true;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error creating simplified chart:', error);
+    console.error('Error rendering skills radar:', error);
     return false;
   }
-};
+}
 
-export default createSimplifiedSkillsChart;
+export default createSkillsRadar;
