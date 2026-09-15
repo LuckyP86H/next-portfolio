@@ -73,7 +73,7 @@ chmod +x scripts/validate-ci.sh
 
 - Clear node_modules: `rm -rf node_modules && npm install`
 - Clear Playwright cache: `npx playwright install --force`
-- Check Node version matches CI (18.x): `node --version`
+- Check Node version matches CI (24.x): `node --version`
 
 ### Build fails
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, X } from 'lucide-react';
@@ -8,8 +8,7 @@ import { FaGithub } from 'react-icons/fa6';
 import CodeBlock from '@components/ui/CodeBlock';
 import Button from '@components/ui/Button';
 import { projects, projectCategories, type Project } from '@content/projects';
-
-const basePath = process.env.NODE_ENV === 'production' ? '/next-portfolio' : '';
+import { basePath } from '@content/site';
 
 const EXT: Record<string, string> = { javascript: 'js', typescript: 'ts', java: 'java', python: 'py' };
 const extFor = (lang: string) => EXT[lang] ?? 'txt';
@@ -17,9 +16,29 @@ const extFor = (lang: string) => EXT[lang] ?? 'txt';
 export default function ProjectsGrid() {
   const [filter, setFilter] = useState('All');
   const [selected, setSelected] = useState<Project | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const filtered =
     filter === 'All' ? projects : projects.filter((p) => p.tags.includes(filter));
+
+  // Dialog behaviour: Escape closes, the page behind stops scrolling, focus moves to the
+  // close button and returns to the card that opened it.
+  useEffect(() => {
+    if (!selected) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelected(null);
+    };
+    document.addEventListener('keydown', onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previousOverflow;
+      opener?.focus();
+    };
+  }, [selected]);
 
   return (
     <div className="flex h-full flex-col gap-4 p-4 sm:p-5">
@@ -55,14 +74,14 @@ export default function ProjectsGrid() {
               className="group/card flex flex-col overflow-hidden rounded border border-chic-border bg-black text-left transition-colors hover:border-chic-cyan/60"
               aria-label={`Open details for ${project.title}`}
             >
-              <header className="flex items-center justify-between border-b border-chic-border px-3 py-2">
+              <header className="flex items-center justify-between gap-2 border-b border-chic-border px-3 py-2">
                 <span className="truncate text-sm font-semibold text-chic-fg">{project.title}</span>
-                <span className="ml-2 text-[10px] uppercase tracking-wider text-chic-muted">
+                <span className="shrink-0 text-[10px] uppercase tracking-wider text-chic-muted">
                   {project.language}
                 </span>
               </header>
 
-              <div className="relative h-28 overflow-hidden border-b border-chic-border bg-black">
+              <div className="relative h-32 overflow-hidden border-b border-chic-border bg-black">
                 {project.image ? (
                   <Image
                     src={`${basePath}${project.image}`}
@@ -73,26 +92,38 @@ export default function ProjectsGrid() {
                     className="object-cover opacity-90 transition-transform duration-300 group-hover/card:scale-105"
                   />
                 ) : (
-                  <CodeBlock
-                    code={project.snippet}
-                    language={project.language}
-                    className="h-full rounded-none border-0"
-                  />
+                  <>
+                    <CodeBlock
+                      code={project.snippet}
+                      language={project.language}
+                      className="h-full rounded-none border-0"
+                    />
+                    {/* Fade the cropped snippet out so the cut-off reads as intentional. */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black to-transparent"
+                    />
+                  </>
                 )}
                 <span className="absolute inset-0 flex items-end justify-end bg-gradient-to-t from-black/70 to-transparent p-2 text-[11px] text-chic-cyan opacity-0 transition-opacity group-hover/card:opacity-100">
                   view →
                 </span>
               </div>
 
-              <div className="mt-auto flex flex-wrap gap-1 p-3">
-                {project.technologies.slice(0, 3).map((tech) => (
-                  <span
-                    key={tech}
-                    className="border border-chic-border px-1.5 py-0.5 text-[10px] text-chic-muted"
-                  >
-                    {tech}
-                  </span>
-                ))}
+              <div className="flex flex-1 flex-col gap-3 p-3">
+                <p className="line-clamp-2 text-xs leading-relaxed text-chic-muted">
+                  {project.description}
+                </p>
+                <div className="mt-auto flex flex-wrap gap-1">
+                  {project.technologies.slice(0, 3).map((tech) => (
+                    <span
+                      key={tech}
+                      className="border border-chic-border px-1.5 py-0.5 text-[10px] text-chic-muted"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
             </motion.button>
           ))}
@@ -109,23 +140,26 @@ export default function ProjectsGrid() {
             onClick={() => setSelected(null)}
             role="dialog"
             aria-modal="true"
-            aria-label={`${selected.title} details`}
+            aria-labelledby="project-dialog-title"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 10 }}
               transition={{ duration: 0.2 }}
-              className="no-scrollbar relative max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded border border-chic-cyan/40 bg-chic-panel shadow-glow"
+              className="relative max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded border border-chic-cyan/40 bg-chic-panel shadow-glow"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="sticky top-0 flex items-center justify-between border-b border-chic-border bg-chic-panel px-4 py-3">
-                <h3 className="text-lg font-semibold text-chic-fg">{selected.title}</h3>
+              <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-chic-border bg-chic-panel px-4 py-3">
+                <h3 id="project-dialog-title" className="truncate text-lg font-semibold text-chic-fg">
+                  {selected.title}
+                </h3>
                 <button
+                  ref={closeRef}
                   type="button"
                   onClick={() => setSelected(null)}
                   aria-label="Close dialog"
-                  className="p-1 text-chic-muted transition-colors hover:text-chic-cyan"
+                  className="shrink-0 p-1 text-chic-muted transition-colors hover:text-chic-cyan"
                 >
                   <X className="h-5 w-5" aria-hidden />
                 </button>

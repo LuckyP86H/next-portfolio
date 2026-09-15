@@ -1,17 +1,19 @@
-'use client';
-
 import { GitBranch, Circle } from 'lucide-react';
 import { FaGithub, FaLinkedin, FaXTwitter, FaEnvelope } from 'react-icons/fa6';
 import type { ReactNode } from 'react';
+import { site } from '@content/site';
 
 const SOCIALS = [
-  { href: 'https://github.com/LuckyP86H', label: 'GitHub', icon: <FaGithub className="h-4 w-4" aria-hidden /> },
-  { href: 'https://linkedin.com/in/paul-xu', label: 'LinkedIn', icon: <FaLinkedin className="h-4 w-4" aria-hidden /> },
-  { href: 'https://twitter.com/PaulLovesCoding', label: 'X (Twitter)', icon: <FaXTwitter className="h-4 w-4" aria-hidden /> },
-  { href: 'mailto:paulxu155@gmail.com', label: 'Email', icon: <FaEnvelope className="h-4 w-4" aria-hidden /> },
+  { href: site.github, label: 'GitHub', icon: <FaGithub className="h-4 w-4" aria-hidden /> },
+  { href: site.linkedin, label: 'LinkedIn', icon: <FaLinkedin className="h-4 w-4" aria-hidden /> },
+  { href: site.twitter, label: 'X (Twitter)', icon: <FaXTwitter className="h-4 w-4" aria-hidden /> },
+  { href: `mailto:${site.email}`, label: 'Email', icon: <FaEnvelope className="h-4 w-4" aria-hidden /> },
 ];
 
-/** VS Code-style status bar. */
+/**
+ * VS Code-style status bar. Server component on purpose: the year is baked in at
+ * build time, so there is nothing to hydrate (and no mismatch when the year rolls over).
+ */
 export default function Footer() {
   return (
     <footer className="mt-auto border-t border-chic-border bg-chic-panel">
@@ -38,7 +40,7 @@ export default function Footer() {
         </div>
 
         <p className="text-[11px] text-chic-muted sm:ml-4">
-          &copy; {new Date().getFullYear()} Paul Xu
+          &copy; {new Date().getFullYear()} {site.name}
         </p>
       </div>
     </footer>

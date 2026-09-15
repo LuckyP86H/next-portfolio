@@ -1,5 +1,5 @@
 /**
- * Type definitions for skills and skill visualization
+ * Type definitions for skills and the skills radar visualization.
  */
 
 export interface Skill {
@@ -8,8 +8,6 @@ export interface Skill {
   category: string;
   description: string;
 }
-
-export type SkillCategory = 'Languages' | 'Frameworks' | 'Frontend' | 'Data' | 'Build & Ops' | 'Cloud';
 
 export interface TooltipPayload {
   visible: boolean;

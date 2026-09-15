@@ -1,11 +1,11 @@
-'use client';
-
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 
 type Variant = 'primary' | 'secondary' | 'ghost';
 
+// No `focus-visible:outline-none` here: the global cyan focus ring in globals.css is
+// the keyboard affordance for every control.
 const BASE =
-  'inline-flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-medium transition-all focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50';
 
 const VARIANTS: Record<Variant, string> = {
   primary: 'bg-chic-cyan text-black hover:bg-chic-cyan/90 hover:shadow-glow',

@@ -1,7 +1,4 @@
-/**
- * PostCSS config for Tailwind + Autoprefixer.
- * References tailwind.config.js at root for build/dev-time processing.
- */
+/** PostCSS config for Tailwind + Autoprefixer (reads ./tailwind.config.js). */
 module.exports = {
   plugins: {
     tailwindcss: {},

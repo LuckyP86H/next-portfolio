@@ -3,6 +3,8 @@ import { Fira_Code } from 'next/font/google';
 import './globals.css';
 import Header from '@components/layout/Header';
 import Footer from '@components/layout/Footer';
+import MotionProvider from '@components/layout/MotionProvider';
+import { site } from '@content/site';
 
 const firaCode = Fira_Code({
   subsets: ['latin'],
@@ -10,10 +12,14 @@ const firaCode = Fira_Code({
   display: 'swap',
 });
 
+const title = `${site.name} — ${site.role}`;
+const description = `${site.name} is a software engineer at ${site.company} who builds backend systems with Java, Spring, Docker and Kubernetes.`;
+
 export const metadata: Metadata = {
-  title: 'Paul Xu — Software Engineer',
-  description:
-    "Paul Xu's portfolio — backend software engineer working with Java, Spring, Docker, and Kubernetes. A Developer Chic dashboard.",
+  metadataBase: new URL('https://luckyp86h.github.io/next-portfolio'),
+  title,
+  description,
+  openGraph: { title, description, type: 'website' },
 };
 
 export const viewport: Viewport = {
@@ -22,19 +28,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`dark ${firaCode.variable}`}>
-      <body className="font-mono min-h-screen flex flex-col bg-chic-black text-chic-fg antialiased">
-        <div className="flex flex-col min-h-screen">
+      <body className="flex min-h-screen flex-col bg-chic-black font-mono text-chic-fg antialiased">
+        <MotionProvider>
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-1">{children}</main>
           <Footer />
-        </div>
+        </MotionProvider>
       </body>
     </html>
   );

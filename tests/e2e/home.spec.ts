@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test';
 
 const PANELS = [
   'bento-identity',
+  'bento-profile',
   'bento-about',
   'bento-skills',
-  'bento-activity',
   'bento-experience',
   'bento-projects',
   'bento-contact',
@@ -45,12 +45,17 @@ test.describe('Developer Chic portfolio dashboard', () => {
   test('project detail modal opens and closes', async ({ page }) => {
     const projects = page.getByTestId('bento-projects');
     await projects.scrollIntoViewIfNeeded();
-    await projects.getByRole('button', { name: /Open details for/ }).first().click();
+    const firstCard = projects.getByRole('button', { name: /Open details for/ }).first();
 
+    await firstCard.click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
-
     await dialog.getByRole('button', { name: 'Close dialog' }).click();
+    await expect(dialog).toBeHidden();
+
+    await firstCard.click();
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
   });
 
@@ -60,5 +65,19 @@ test.describe('Developer Chic portfolio dashboard', () => {
     await contact.getByRole('button', { name: /Send message/ }).click();
     await expect(contact.getByText('Name is required')).toBeVisible();
     await expect(contact.getByText('Email is required')).toBeVisible();
+  });
+
+  test('phone layout has no horizontal overflow and the drawer navigates', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    await page.locator('#mobile-tabs a[href="#skills"]').click();
+    await expect(page).toHaveURL(/#skills$/);
+    await expect(page.locator('#mobile-tabs')).toBeHidden();
   });
 });

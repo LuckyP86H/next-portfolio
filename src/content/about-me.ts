@@ -1,12 +1,8 @@
-/**
- * About me content - personal introduction paragraphs
- */
+/** "About me" paragraphs rendered by the terminal panel (`cat about-me.txt`). */
 export const aboutMeParagraphs: string[] = [
-  "Hello everyone! My name is Paul. Welcome to my home page. I have a Bachelor's degree in Computer Science from UWaterloo. I am passionate about building scalable software and have experience with backend development using Spring, as well as tools like GitHub Actions, Docker, and AWS.",
+  "I'm Paul, a software engineer based in Toronto. I studied Computer Science at the University of Waterloo, and my work since then has centered on backend systems, mostly Java and Spring, together with the build and deployment infrastructure around them.",
 
-  "I am currently a Software Engineer at Clari with 4 years of experience. My work focuses on developing robust backend systems and improving build infrastructure. I've recently been exploring various build systems including Gradle and Bazel for better performance and scalability.",
+  'I joined ZoomInfo as a Software Engineer in July 2026, after several years at Clari building backend services and making builds faster and more reliable with Gradle and Bazel. I like systems that are simple to reason about, easy to operate, and quick to ship.',
 
-  "When I'm not coding, I enjoy exploring food in the city, playing badminton, basketball, and staying fit. I'm also passionate about learning new technologies and constantly improving my skills in data structures, algorithms, and system design."
+  "Away from the keyboard I'm usually hunting for good food around the city, playing badminton or basketball, or reading about distributed systems and system design.",
 ];
-
-export default aboutMeParagraphs;
