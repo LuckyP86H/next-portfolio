@@ -20,9 +20,9 @@ function Prompt() {
  */
 export default function TerminalAbout() {
   return (
-    <div className="flex h-full flex-col gap-3 p-4 text-[13px] sm:p-5">
+    <div className="flex h-full flex-col gap-3 p-4 text-sm sm:p-5">
       <p className="text-chic-muted">
-        <Prompt /> <span className="text-chic-fg">cat about-me.txt</span>
+        <Prompt /> <span className="whitespace-nowrap text-chic-fg">cat about-me.txt</span>
       </p>
 
       <div className="space-y-3">

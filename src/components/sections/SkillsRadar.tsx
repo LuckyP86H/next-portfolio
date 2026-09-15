@@ -1,19 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { skills, skillCategories, colorForCategory } from '@content/skills';
-import createSkillsRadar from '@lib/visualization/skills-radar';
+import { createSkillsRadar, VIEW_W, VIEW_H } from '@lib/visualization/skills-radar';
 import type { TooltipPayload } from '@/types/skills';
+
+const HIDDEN: TooltipPayload = { visible: false, skill: null, x: 0, y: 0 };
 
 export default function SkillsRadar() {
   const svgRef = useRef<SVGSVGElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [tooltip, setTooltip] = useState<TooltipPayload>({
-    visible: false,
-    skill: null,
-    x: 0,
-    y: 0,
-  });
+  const [tooltip, setTooltip] = useState<TooltipPayload>(HIDDEN);
 
   // Redraw whenever the active category changes. The SVG scales itself via viewBox,
   // so no resize handling is required for responsiveness.
@@ -21,8 +19,22 @@ export default function SkillsRadar() {
     createSkillsRadar(svgRef, skills, selectedCategory, colorForCategory, setTooltip);
   }, [selectedCategory]);
 
-  const toggle = (category: string) =>
+  const toggle = (category: string) => {
+    setTooltip(HIDDEN);
     setSelectedCategory((prev) => (prev === category ? null : category));
+  };
+
+  // Keep the tooltip inside the chart: anchor it to whichever side of the pointer has room.
+  const tooltipStyle = (): CSSProperties => {
+    const w = wrapRef.current?.clientWidth ?? 0;
+    const h = wrapRef.current?.clientHeight ?? 0;
+    const style: CSSProperties = {};
+    if (w && tooltip.x > w / 2) style.right = Math.max(0, w - tooltip.x + 12);
+    else style.left = Math.max(0, tooltip.x + 12);
+    if (h && tooltip.y > h / 2) style.bottom = Math.max(0, h - tooltip.y + 12);
+    else style.top = Math.max(0, tooltip.y + 12);
+    return style;
+  };
 
   return (
     <div className="flex h-full flex-col gap-4 p-4 sm:p-5">
@@ -48,19 +60,25 @@ export default function SkillsRadar() {
         })}
       </div>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center">
+      <div
+        ref={wrapRef}
+        className="relative flex min-h-0 flex-1 items-center justify-center"
+        onClick={(e) => {
+          // A tap anywhere that isn't a data point dismisses a touch-opened tooltip.
+          if (!(e.target instanceof SVGCircleElement)) setTooltip(HIDDEN);
+        }}
+      >
         <svg
           ref={svgRef}
-          className="d3-chart aspect-[520/400] w-full"
+          className="d3-chart w-full max-w-[440px]"
+          style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}` }}
+          role="img"
           aria-label="Skills radar chart"
         />
         {tooltip.visible && tooltip.skill && (
           <div
             className="pointer-events-none absolute z-20 max-w-[240px] border border-chic-cyan/40 bg-chic-panel p-2.5 text-xs shadow-glow-sm"
-            style={{
-              left: `${Math.max(8, tooltip.x + 12)}px`,
-              top: `${Math.max(8, tooltip.y - 10)}px`,
-            }}
+            style={tooltipStyle()}
           >
             <div className="font-semibold text-chic-fg">
               {tooltip.skill.name} · {tooltip.skill.level}%
@@ -74,7 +92,7 @@ export default function SkillsRadar() {
       <p className="text-center text-[11px] text-chic-muted">
         {selectedCategory
           ? `Showing ${selectedCategory}`
-          : 'Showing top skills — pick a category to filter'}
+          : 'Showing top skills. Pick a category to filter.'}
       </p>
     </div>
   );

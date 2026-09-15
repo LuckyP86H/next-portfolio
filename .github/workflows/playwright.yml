@@ -1,8 +1,7 @@
+# PR gate only — pushes to main are tested by deploy.yml before the build.
 name: Playwright Tests
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -15,7 +14,8 @@ jobs:
 
     - uses: actions/setup-node@v6
       with:
-        node-version: lts/*
+        node-version: "24"
+        cache: 'npm'
 
     - name: Install dependencies
       run: npm ci

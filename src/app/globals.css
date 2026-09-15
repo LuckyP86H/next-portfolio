@@ -61,7 +61,7 @@ a {
   color: inherit;
 }
 
-/* Respect reduced-motion for all decorative animation */
+/* Respect reduced-motion for all decorative CSS animation (framer-motion is handled by MotionProvider) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -71,23 +71,6 @@ a {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* ---- D3 skills radar (dark) ----
-   Note: fills are set per-element by D3 (category colors), so no blanket
-   `.d3-chart text { fill }` here — a CSS fill would override those attributes. */
-.d3-chart .chart-tooltip {
-  position: absolute;
-  padding: 0.5rem 0.75rem;
-  border-radius: 3px;
-  pointer-events: none;
-  z-index: 20;
-  max-width: 18rem;
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  background-color: #0a0a0a;
-  color: var(--chic-fg);
-  border: 1px solid rgba(0, 242, 255, 0.4);
 }
 
 /* ---- Scrollbars ---- */
@@ -110,7 +93,7 @@ a {
   background-color: rgba(0, 242, 255, 0.5);
 }
 
-/* Hide scrollbar but keep scrolling (used inside bento panels) */
+/* Hide scrollbar but keep scrolling (code previews inside project cards) */
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -120,7 +103,7 @@ a {
   display: none;
 }
 
-/* Utility: thin cyan focus ring for keyboard users */
+/* Thin cyan focus ring for keyboard users */
 :focus-visible {
   outline: 2px solid var(--chic-cyan);
   outline-offset: 2px;

@@ -1,5 +1,3 @@
-import { Fragment } from 'react';
-
 /**
  * Dependency-free syntax highlighter. A single-pass tokenizer classifies comments,
  * strings, numbers, keywords and function calls, then renders them as colored spans.
@@ -82,9 +80,9 @@ export default function CodeBlock({ code, filename, language, className = '' }: 
       <pre className="no-scrollbar overflow-x-auto p-3 text-[12.5px] leading-relaxed">
         <code>
           {tokens.map((token, i) => (
-            <Fragment key={i}>
-              <span className={token.cls}>{token.value}</span>
-            </Fragment>
+            <span key={i} className={token.cls}>
+              {token.value}
+            </span>
           ))}
         </code>
       </pre>

@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import { Terminal, Menu, X } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa6';
+import { site } from '@content/site';
 
-/** Section anchors rendered as IDE editor tabs. */
+/** Section anchors rendered as IDE editor tabs, in page order. */
 const TABS = [
   { id: 'about', label: 'about.ts' },
   { id: 'skills', label: 'skills.json' },
-  { id: 'projects', label: 'projects/' },
   { id: 'experience', label: 'experience.log' },
+  { id: 'projects', label: 'projects/' },
   { id: 'contact', label: 'contact.md' },
 ];
 
@@ -37,9 +38,19 @@ export default function Header() {
     return () => observer.disconnect();
   }, []);
 
+  // Escape closes the mobile drawer.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-chic-border bg-chic-black/90 backdrop-blur-md">
-      <nav className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:px-6">
+      <nav className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:px-6" aria-label="Primary">
         {/* Brand / breadcrumb */}
         <a
           href="#top"
@@ -53,8 +64,8 @@ export default function Header() {
           <span className="hidden text-xs text-chic-muted sm:inline">~/portfolio</span>
         </a>
 
-        {/* Desktop editor tabs */}
-        <ul className="ml-4 hidden items-stretch self-stretch md:flex">
+        {/* Editor tabs — lg and up; at tablet widths five tabs plus the brand would overflow. */}
+        <ul className="ml-4 hidden items-stretch self-stretch lg:flex">
           {TABS.map((tab) => {
             const isActive = active === tab.id;
             return (
@@ -81,7 +92,7 @@ export default function Header() {
         {/* Right side actions */}
         <div className="ml-auto flex items-center gap-2">
           <a
-            href="https://github.com/LuckyP86H"
+            href={site.github}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center gap-1.5 border border-chic-border px-2.5 py-1.5 text-xs text-chic-muted transition-colors hover:border-chic-cyan/60 hover:text-chic-cyan sm:inline-flex"
@@ -91,11 +102,11 @@ export default function Header() {
             <span>GitHub</span>
           </a>
 
-          {/* Mobile menu button */}
+          {/* Drawer toggle (below lg) */}
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
-            className="inline-flex h-9 w-9 items-center justify-center border border-chic-border text-chic-fg transition-colors hover:border-chic-cyan/60 hover:text-chic-cyan md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center border border-chic-border text-chic-fg transition-colors hover:border-chic-cyan/60 hover:text-chic-cyan lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-tabs"
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -105,12 +116,9 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Mobile tab drawer */}
+      {/* Tab drawer (below lg) */}
       {open && (
-        <ul
-          id="mobile-tabs"
-          className="border-t border-chic-border bg-chic-panel md:hidden"
-        >
+        <ul id="mobile-tabs" className="border-t border-chic-border bg-chic-panel lg:hidden">
           {TABS.map((tab) => (
             <li key={tab.id}>
               <a

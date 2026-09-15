@@ -1,5 +1,6 @@
 /**
  * Professional experience entries for the Bento "Experience" panel.
+ * Keep each entry to a few short points; the panel is a log, not a résumé.
  */
 
 export interface ExperienceEntry {
@@ -14,26 +15,32 @@ export interface ExperienceEntry {
 export const experience: ExperienceEntry[] = [
   {
     role: 'Software Engineer',
-    org: 'Clari',
-    period: '2021 — Present',
+    org: 'ZoomInfo',
+    period: 'Jul 2026 – Present',
     kind: 'Full-time',
     current: true,
     points: [
-      'Lead backend infrastructure development in Java and Spring Boot, building scalable microservices for enterprise clients.',
-      'Implemented and optimized Gradle and Bazel build systems, improving build times by ~35% across the org.',
-      'Designed and deployed cloud-native solutions with Docker and AWS in cross-functional teams.',
+      'Backend services in Java and Spring Boot, and the build and deployment infrastructure behind them.',
+    ],
+  },
+  {
+    role: 'Software Engineer',
+    org: 'Clari',
+    period: '2021 – 2026',
+    kind: 'Full-time',
+    points: [
+      'Built and ran Java / Spring Boot microservices serving enterprise customers.',
+      'Cut build times by roughly 35% across the org by tuning the Gradle and Bazel builds.',
+      'Shipped cloud-native services on Docker and AWS with cross-functional teams.',
     ],
   },
   {
     role: 'Volunteer',
-    org: 'MongoDB Local Event',
+    org: 'MongoDB Local',
     period: '2023',
     kind: 'Community',
     points: [
-      "Helped organize and run MongoDB's local developer event — registration, technical setup, and speaker coordination.",
-      'Participated in hands-on workshops on MongoDB best practices and use cases.',
+      "Helped run MongoDB's local developer event: registration, technical setup, and speaker coordination.",
     ],
   },
 ];
-
-export default experience;

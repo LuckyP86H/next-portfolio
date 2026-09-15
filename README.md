@@ -1,144 +1,60 @@
-# Modern Portfolio
+# next-portfolio
 
-A modern portfolio site built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
+Paul Xu's portfolio: a single-page, dark-only "Developer Chic" Bento dashboard built with
+Next.js 15 (App Router, static export), React 19, TypeScript, Tailwind CSS, Framer Motion
+and D3. It deploys to GitHub Pages.
 
-## Quick Start
+## Quick start
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
-
-# Open http://localhost:3000 in your browser
+npm run dev        # http://localhost:3000
 ```
 
-## Tech Stack
+## Commands
 
-- **Next.js 14** - App Router, SSR, optimized performance
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Framer Motion** - Animations
-- **D3.js** - Data visualization (skills chart)
-- **Playwright** - E2E testing
+| Command             | What it does                                                    |
+| ------------------- | --------------------------------------------------------------- |
+| `npm run dev`       | Development server                                              |
+| `npm run build`     | Lint, type-check and export the static site to `./out`          |
+| `npm run lint`      | ESLint (`next/core-web-vitals` + `next/typescript`)             |
+| `npm run typecheck` | `tsc --noEmit`                                                  |
+| `npm test`          | Playwright E2E suite (run `npx playwright install` once first)  |
 
-## Project Structure
+`./scripts/validate-ci.sh` runs the same test-then-build sequence as CI.
+
+## Project structure
 
 ```
-next-portfolio/
-├── src/
-│   ├── app/              # Next.js App Router pages
-│   ├── components/       # React components
-│   │   ├── layout/       # Header, Footer, ThemeProvider
-│   │   ├── sections/     # Page sections (Hero, About, etc.)
-│   │   └── ui/           # Reusable UI components
-│   ├── content/          # Static data (skills, about)
-│   ├── lib/              # Business logic & utilities
-│   │   └── visualization/ # D3 charts
-│   └── types/            # TypeScript type definitions
-├── tests/                # E2E tests with Playwright
-├── config/               # Configuration files
-├── tools/                # Development tools (Nx, Madge)
-├── scripts/              # Build & validation scripts
-└── public/               # Static assets
+src/
+├── app/            layout.tsx, page.tsx (the Bento grid), globals.css
+├── components/
+│   ├── layout/     Header (IDE tab bar), Footer (status bar), MotionProvider
+│   ├── sections/   One component per Bento panel
+│   └── ui/         BentoCard, Button, CodeBlock
+├── content/        All copy and facts: site, about-me, skills, experience, projects
+├── lib/            useTypewriter hook, D3 skills radar
+└── types/          Shared TypeScript types
+tests/e2e/          Playwright specs
+public/assets/      Images referenced from src/content/projects.ts
 ```
 
-## Development Commands
+## Editing content
 
-```bash
-# Development
-npm run dev              # Start dev server (localhost:3000)
-npm run build            # Build for production
-npm run start            # Start production server
+Everything a visitor reads lives in `src/content/`:
 
-# Testing
-npm test                 # Run E2E tests
-npm run test:ui          # Run tests with UI mode
-npm run test:headed      # Run tests with visible browser
-
-# Code Quality
-npm run lint             # Run ESLint
-
-# Dependency Visualization
-npm run dep-graph        # Generate Nx dependency graph
-npm run serve:tools      # Serve tools at localhost:8000
-```
-
-## Testing
-
-E2E tests are located in `tests/e2e/`. Tests run automatically in CI/CD before deployment.
-
-```bash
-# Install Playwright browsers (first time only)
-npx playwright install
-
-# Run all tests
-npm test
-
-# Run specific test
-npx playwright test tests/e2e/home.spec.ts
-```
-
-See [tests/README.md](tests/README.md) for more details.
-
-## Validate Before Push
-
-Ensure your changes will pass CI/CD:
-
-```bash
-./scripts/validate-ci.sh
-```
-
-This runs the same checks as GitHub Actions:
-1. Install dependencies
-2. Install Playwright browsers
-3. Run all tests
-4. Build application
-5. Verify output
-
-See [scripts/README.md](scripts/README.md) for more options including using `act`.
-
-## Dependency Visualization
-
-View project dependencies using Nx or Madge:
-
-```bash
-# Generate and view Nx dependency graph
-npm run dep-graph
-
-# Or serve tools directory and open in browser
-npm run serve:tools
-# Open http://localhost:8000/nx/nx-dep-graph.html
-# Open http://localhost:8000/nx/madge-deps.html
-```
-
-See [tools/README.md](tools/README.md) for more details.
+- `site.ts`: name, role, company, dates, links and location. The header, hero, profile
+  panel, footer and contact panel all read from it, so update it in one place.
+- `about-me.ts`: the paragraphs in the `about.ts` terminal panel.
+- `skills.ts`: radar skills, categories and colors. Keep at least three skills per category.
+- `experience.ts`: the `experience.log` timeline.
+- `projects.ts`: project cards, code snippets and optional images.
 
 ## Deployment
 
-Deploys automatically to GitHub Pages when pushing to `main` branch.
-
-**CI/CD Pipeline:**
-1. ✅ Run E2E tests (must pass)
-2. ✅ Build Next.js site (must succeed)
-3. ✅ Deploy to GitHub Pages
-
-Manual deployment:
-```bash
-npm run build
-npm run export
-```
-
-## Features
-
-- ✅ Dark/Light mode toggle
-- ✅ Responsive design
-- ✅ Smooth animations
-- ✅ Interactive skills visualization
-- ✅ SEO optimized
-- ✅ Type-safe with TypeScript
-- ✅ E2E tested with Playwright
+Pushing to `main` runs `.github/workflows/deploy.yml`: the Playwright suite must pass, then
+`next build` exports the site and publishes `./out` to GitHub Pages. The `/next-portfolio`
+base path is applied only in production builds, so local development runs at the root.
 
 ## License
 

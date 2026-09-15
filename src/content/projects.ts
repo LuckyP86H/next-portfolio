@@ -132,5 +132,3 @@ fetch(url)
 
 /** Category filter buttons. "All" first, then coarse tags that actually map to projects. */
 export const projectCategories = ['All', 'JavaScript', 'Games', 'APIs', 'Responsive Design'];
-
-export default projects;

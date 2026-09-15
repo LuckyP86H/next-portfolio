@@ -51,5 +51,3 @@ export function useTypewriter(words: string[], options: TypewriterOptions = {}):
   if (reduced) return words[0] ?? '';
   return (words[index % words.length] ?? '').slice(0, subIndex);
 }
-
-export default useTypewriter;

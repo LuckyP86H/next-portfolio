@@ -1,7 +1,0 @@
-{
-  "name": "content",
-  "root": "src/content",
-  "sourceRoot": "src/content",
-  "projectType": "library",
-  "targets": {}
-}

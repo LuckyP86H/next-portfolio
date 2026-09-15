@@ -5,8 +5,9 @@ import { experience } from '@content/experience';
 
 export default function ExperiencePanel() {
   return (
-    <div className="flex h-full flex-col gap-6 p-5 sm:p-6">
-      <ol className="relative space-y-8 border-l border-chic-border pl-6">
+    <div className="flex h-full flex-col p-4 sm:p-5">
+      {/* pl-6 + 1px rule: the 12px marker is offset so its center sits on the rule. */}
+      <ol className="relative space-y-7 border-l border-chic-border pl-6">
         {experience.map((entry, i) => (
           <motion.li
             key={`${entry.org}-${entry.role}`}
@@ -17,7 +18,7 @@ export default function ExperiencePanel() {
             className="relative"
           >
             <span
-              className={`absolute -left-[27px] top-1 h-3 w-3 rounded-full border-2 border-chic-black ${
+              className={`absolute -left-[30.5px] top-1 h-3 w-3 rounded-full border-2 border-chic-panel ${
                 entry.current ? 'bg-chic-cyan shadow-glow-sm' : 'bg-chic-muted'
               }`}
               aria-hidden
