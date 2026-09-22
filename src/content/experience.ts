@@ -1,6 +1,8 @@
 /**
- * Professional experience entries for the Bento "Experience" panel.
- * Keep each entry to a few short points; the panel is a log, not a résumé.
+ * Professional experience and extracurricular entries for the Bento "Experience"
+ * panel. Keep each entry to a few short points; the panel is a log, not a résumé.
+ * Jobs are listed first (most recent first), then extracurricular entries below,
+ * distinguished by `kind`.
  */
 
 export interface ExperienceEntry {
@@ -16,31 +18,43 @@ export const experience: ExperienceEntry[] = [
   {
     role: 'Software Engineer',
     org: 'ZoomInfo',
-    period: 'Jul 2026 – Present',
+    period: '2026 – Present',
     kind: 'Full-time',
     current: true,
     points: [
-      'Backend services in Java and Spring Boot, and the build and deployment infrastructure behind them.',
+      'Building AI Platform capabilities for next-generation conversation intelligence, including agentic task scheduling and scalable data ingestion and streaming.',
     ],
   },
   {
     role: 'Software Engineer',
     org: 'Clari',
-    period: '2021 – 2026',
+    period: '2022 – 2026',
     kind: 'Full-time',
     points: [
-      'Built and ran Java / Spring Boot microservices serving enterprise customers.',
-      'Cut build times by roughly 35% across the org by tuning the Gradle and Bazel builds.',
-      'Shipped cloud-native services on Docker and AWS with cross-functional teams.',
+      // Service Foundations
+      'Built a reusable, self-service template for creating new backend services end-to-end.',
+      'Delivered feature flags as a platform service with server-side SDK integration, event-driven webhooks, and code-reference tooling to track flag usage.',
+      // Developer Experience
+      'Set up Bazel distributed builds and a custom Java toolchain for a large core monolith.',
+      "Built a Bazel remote cache as part of the team's build-velocity work.",
     ],
   },
   {
-    role: 'Volunteer',
-    org: 'MongoDB Local',
-    period: '2023',
-    kind: 'Community',
+    role: 'BazelCon 2025',
+    org: 'Linux Foundation',
+    period: '2025',
+    kind: 'Extracurricular',
     points: [
-      "Helped run MongoDB's local developer event: registration, technical setup, and speaker coordination.",
+      'Expanded my understanding of large-scale build systems and practices across the Bazel ecosystem.',
+    ],
+  },
+  {
+    role: 'MongoDB.local Toronto',
+    org: 'MongoDB',
+    period: '2024',
+    kind: 'Extracurricular',
+    points: [
+      'Explored Atlas Vector Search and multi-cloud architecture patterns with MongoDB Atlas.',
     ],
   },
 ];

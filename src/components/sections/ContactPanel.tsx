@@ -72,10 +72,6 @@ export default function ContactPanel() {
       <div className="space-y-5">
         <div>
           <h3 className="text-lg font-semibold text-chic-fg">Get in touch</h3>
-          <p className="mt-2 text-sm leading-relaxed text-chic-muted">
-            Open to new projects, ideas, and opportunities. Send a note and I&apos;ll get back to
-            you.
-          </p>
         </div>
         <ul className="space-y-3">
           {CONTACT_INFO.map((item) => (
