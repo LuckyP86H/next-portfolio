@@ -15,7 +15,7 @@ export const skills: Skill[] = [
   },
   {
     name: 'Python',
-    level: 40,
+    level: 60,
     category: 'Languages',
     description: 'Scripting, data wrangling, and automation.',
   },
@@ -24,6 +24,12 @@ export const skills: Skill[] = [
     level: 35,
     category: 'Languages',
     description: 'Typed front-end and tooling code, including this site.',
+  },
+  {
+    name: 'Go',
+    level: 20,
+    category: 'Languages',
+    description: 'Learning Go for small backend services and CLIs.',
   },
 
   // Backend
@@ -40,10 +46,16 @@ export const skills: Skill[] = [
     description: 'Designing and running microservice APIs for enterprise customers.',
   },
   {
-    name: 'Spring Cloud',
-    level: 65,
+    name: 'FastAPI / Alembic',
+    level: 45,
     category: 'Backend',
-    description: 'Service discovery, configuration, and resilience patterns for microservices.',
+    description: 'Python API services with FastAPI and Alembic-managed schema migrations.',
+  },
+  {
+    name: 'Protobuf',
+    level: 45,
+    category: 'Backend',
+    description: 'Schema-first service contracts with Protocol Buffers.',
   },
 
   // Frontend
@@ -68,12 +80,6 @@ export const skills: Skill[] = [
 
   // Data
   {
-    name: 'PostgreSQL',
-    level: 60,
-    category: 'Data',
-    description: 'Schema design, performance tuning, and query optimization.',
-  },
-  {
     name: 'SQL',
     level: 60,
     category: 'Data',
@@ -85,43 +91,49 @@ export const skills: Skill[] = [
     category: 'Data',
     description: 'Document modelling and the aggregation framework.',
   },
+  {
+    name: 'Redis',
+    level: 30,
+    category: 'Data',
+    description: 'Caching and fast key-value lookups for hot data paths.',
+  },
 
-  // Build & Cloud
+  // Infrastructure & Tooling
   {
-    name: 'Gradle',
-    level: 70,
-    category: 'Build & Cloud',
-    description: 'Build automation with custom tasks and dependency management.',
-  },
-  {
-    name: 'Docker',
+    name: 'Gradle / Bazel',
     level: 65,
-    category: 'Build & Cloud',
-    description: 'Containerized services and reproducible dev environments.',
+    category: 'Infrastructure & Tooling',
+    description: 'Build automation and fast, incremental, cached builds at scale.',
   },
   {
-    name: 'Bazel',
-    level: 60,
-    category: 'Build & Cloud',
-    description: 'Fast, incremental, cached builds at scale.',
+    name: 'Docker / Kubernetes',
+    level: 50,
+    category: 'Infrastructure & Tooling',
+    description: 'Containerized services and their deployment and operation.',
   },
   {
     name: 'GitHub Actions',
     level: 55,
-    category: 'Build & Cloud',
+    category: 'Infrastructure & Tooling',
     description: 'CI/CD workflows integrated with the repository.',
-  },
-  {
-    name: 'Kubernetes',
-    level: 50,
-    category: 'Build & Cloud',
-    description: 'Deploying and operating containerized services.',
   },
   {
     name: 'AWS',
     level: 40,
-    category: 'Build & Cloud',
+    category: 'Infrastructure & Tooling',
     description: 'EC2, S3, Lambda, and other core services.',
+  },
+  {
+    name: 'RabbitMQ',
+    level: 20,
+    category: 'Infrastructure & Tooling',
+    description: 'Message queues for asynchronous, event-driven workflows.',
+  },
+  {
+    name: 'IoC',
+    level: 40,
+    category: 'Infrastructure & Tooling',
+    description: 'Inversion of control and dependency-injection patterns for testable services.',
   },
 ];
 
@@ -140,7 +152,7 @@ export const categoryColors: Record<string, string> = {
   Backend: '#ff2fb9',
   Frontend: '#39ff14',
   Data: '#ffb000',
-  'Build & Cloud': '#a970ff',
+  'Infrastructure & Tooling': '#a970ff',
 };
 
 export const colorForCategory = (category: string): string =>

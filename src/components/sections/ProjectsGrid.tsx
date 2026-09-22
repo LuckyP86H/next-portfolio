@@ -10,7 +10,7 @@ import Button from '@components/ui/Button';
 import { projects, projectCategories, type Project } from '@content/projects';
 import { basePath } from '@content/site';
 
-const EXT: Record<string, string> = { javascript: 'js', typescript: 'ts', java: 'java', python: 'py' };
+const EXT: Record<string, string> = { javascript: 'js', typescript: 'ts', java: 'java', python: 'py', go: 'go' };
 const extFor = (lang: string) => EXT[lang] ?? 'txt';
 
 export default function ProjectsGrid() {
@@ -194,14 +194,19 @@ export default function ProjectsGrid() {
                   ))}
                 </div>
                 <div className="flex flex-wrap gap-3 pt-1">
-                  <Button href={selected.githubUrl} variant="secondary">
+                  <Button
+                    href={selected.githubUrl}
+                    variant={selected.liveUrl ? 'secondary' : 'primary'}
+                  >
                     <FaGithub className="h-4 w-4" aria-hidden />
                     Repository
                   </Button>
-                  <Button href={selected.liveUrl} variant="primary">
-                    <ExternalLink className="h-4 w-4" aria-hidden />
-                    Live Demo
-                  </Button>
+                  {selected.liveUrl && (
+                    <Button href={selected.liveUrl} variant="primary">
+                      <ExternalLink className="h-4 w-4" aria-hidden />
+                      Live Demo
+                    </Button>
+                  )}
                 </div>
               </div>
             </motion.div>
