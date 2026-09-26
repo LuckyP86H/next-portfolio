@@ -78,13 +78,13 @@ test.describe('Developer Chic portfolio dashboard', () => {
     await page.evaluate(() => document.fonts.ready);
     const roleLine = page.getByTestId('bento-identity').locator('h1 + p');
 
-    // Visible text of the typed layer, and each letter's position within the line.
+    // Visible text of the typed layer, and the center of each letter within the line.
     const snapshot = () =>
       roleLine.evaluate((line) => {
         const origin = line.getBoundingClientRect();
         const walker = document.createTreeWalker(line.lastElementChild!, NodeFilter.SHOW_TEXT);
         let text = '';
-        const spots: string[] = [];
+        const spots: [number, number][] = [];
         for (let node = walker.nextNode(); node; node = walker.nextNode()) {
           if (node.parentElement?.closest('.invisible')) continue;
           for (let i = 0; i < node.textContent!.length; i++) {
@@ -93,12 +93,18 @@ test.describe('Developer Chic portfolio dashboard', () => {
             range.setEnd(node, i + 1);
             const box = range.getBoundingClientRect();
             text += node.textContent![i];
-            spots.push(`${Math.round(box.left - origin.left)},${Math.round(box.top - origin.top)}`);
+            spots.push([
+              box.left + box.width / 2 - origin.left,
+              box.top + box.height / 2 - origin.top,
+            ]);
           }
         }
         return { text, spots, height: Math.round(origin.height) };
       });
 
+    // WebKit rounds partial-text rects out to whole pixels, so a letter can appear to shift
+    // by under a pixel while its pixels stay put. A real hop is a whole character or line.
+    const JITTER_PX = 2;
     const heights = new Set<number>();
     const moved: string[] = [];
     let previous = await snapshot();
@@ -111,11 +117,15 @@ test.describe('Developer Chic portfolio dashboard', () => {
         current.text.startsWith(previous.text) || previous.text.startsWith(current.text);
       const shared = sameRole ? Math.min(current.text.length, previous.text.length) : 0;
       for (let i = 0; i < shared; i++) {
-        if (current.spots[i] !== previous.spots[i]) moved.push(`"${current.text[i]}" in "${current.text}"`);
+        const [x0, y0] = previous.spots[i];
+        const [x1, y1] = current.spots[i];
+        if (Math.abs(x1 - x0) > JITTER_PX || Math.abs(y1 - y0) > JITTER_PX) {
+          moved.push(`"${current.text[i]}" in "${current.text}"`);
+        }
       }
       previous = current;
     }
-    expect([...heights], 'role line heights seen').toHaveLength(1);
+    expect.soft([...heights], 'role line heights seen').toHaveLength(1);
     expect(moved, 'letters that moved after being typed').toEqual([]);
   });
 
