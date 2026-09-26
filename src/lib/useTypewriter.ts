@@ -12,8 +12,14 @@ type TypewriterOptions = {
  * Lightweight typewriter hook (replaces the typewriter-effect dependency).
  * Cycles through `words`, typing then deleting each. Honors prefers-reduced-motion
  * by rendering the first word statically.
+ *
+ * Returns the current `word` and the `text` typed of it so far, so a caller can lay out
+ * the whole word up front and reveal it in place instead of reflowing as it types.
  */
-export function useTypewriter(words: string[], options: TypewriterOptions = {}): string {
+export function useTypewriter(
+  words: string[],
+  options: TypewriterOptions = {}
+): { word: string; text: string } {
   const { typeSpeed = 70, deleteSpeed = 40, pause = 1400 } = options;
   const [subIndex, setSubIndex] = useState(0);
   const [index, setIndex] = useState(0);
@@ -48,6 +54,6 @@ export function useTypewriter(words: string[], options: TypewriterOptions = {}):
     return () => clearTimeout(timer);
   }, [subIndex, deleting, index, words, reduced, typeSpeed, deleteSpeed, pause]);
 
-  if (reduced) return words[0] ?? '';
-  return (words[index % words.length] ?? '').slice(0, subIndex);
+  const word = (reduced ? words[0] : words[index % words.length]) ?? '';
+  return { word, text: reduced ? word : word.slice(0, subIndex) };
 }

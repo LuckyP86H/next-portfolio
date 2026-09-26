@@ -9,7 +9,7 @@ import { site } from '@content/site';
 const ROLES = ['Software Engineer', 'AI Platform', 'Data Ingestion', 'Conversation Intelligence'];
 
 export default function IdentityCard() {
-  const typed = useTypewriter(ROLES);
+  const { word, text } = useTypewriter(ROLES);
 
   return (
     <div className="flex h-full flex-col justify-center gap-5 p-5 sm:p-8">
@@ -24,12 +24,25 @@ export default function IdentityCard() {
         <h1 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
           Paul <span className="text-chic-cyan">Xu</span>
         </h1>
-        <p className="mt-3 text-lg text-chic-fg sm:text-xl">
+        <p className="mt-3 grid text-lg text-chic-fg sm:text-xl">
           {/* Static text for assistive tech; the cycling typewriter is decorative. */}
           <span className="sr-only">{ROLES[0]}</span>
-          <span aria-hidden>
-            <span className="text-chic-cyan">&gt;</span> {typed}
-            <span className="ml-1 inline-block h-5 w-[9px] translate-y-0.5 animate-blink bg-chic-cyan" />
+          {/* Every role, invisible, in one grid cell: the cell fits the tallest, so switching
+              roles never changes the line's height and the page below never jumps. */}
+          {ROLES.map((role) => (
+            <span key={role} aria-hidden className="invisible col-start-1 row-start-1">
+              &gt; {role}
+            </span>
+          ))}
+          {/* The current role is laid out in full from its first keystroke, with the untyped
+              rest invisible, so each letter appears where it will stay. The cursor is drawn
+              over the text instead of taking space in it, so it can never wrap by itself. */}
+          <span aria-hidden className="col-start-1 row-start-1">
+            <span className="text-chic-cyan">&gt;</span> {text}
+            <span className="relative">
+              <span className="absolute bottom-1 left-1 h-5 w-[9px] animate-blink bg-chic-cyan" />
+            </span>
+            <span className="invisible">{word.slice(text.length)}</span>
           </span>
         </p>
       </div>
