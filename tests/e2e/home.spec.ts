@@ -67,6 +67,68 @@ test.describe('Developer Chic portfolio dashboard', () => {
     await expect(contact.getByText('Email is required')).toBeVisible();
   });
 
+  test('typewriter types in place without moving anything', async ({ page }) => {
+    // At 360px the longest role wraps to a second line. The role line must keep one height
+    // for every role, or the panels below jump on each cycle. And each letter must appear
+    // where it will stay, or words hop between lines mid-typing. Fake timers step through
+    // a whole cycle (~13s of typing) in about a second.
+    await page.clock.install();
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const roleLine = page.getByTestId('bento-identity').locator('h1 + p');
+
+    // Visible text of the typed layer, and the center of each letter within the line.
+    const snapshot = () =>
+      roleLine.evaluate((line) => {
+        const origin = line.getBoundingClientRect();
+        const walker = document.createTreeWalker(line.lastElementChild!, NodeFilter.SHOW_TEXT);
+        let text = '';
+        const spots: [number, number][] = [];
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          if (node.parentElement?.closest('.invisible')) continue;
+          for (let i = 0; i < node.textContent!.length; i++) {
+            const range = document.createRange();
+            range.setStart(node, i);
+            range.setEnd(node, i + 1);
+            const box = range.getBoundingClientRect();
+            text += node.textContent![i];
+            spots.push([
+              box.left + box.width / 2 - origin.left,
+              box.top + box.height / 2 - origin.top,
+            ]);
+          }
+        }
+        return { text, spots, height: Math.round(origin.height) };
+      });
+
+    // WebKit rounds partial-text rects out to whole pixels, so a letter can appear to shift
+    // by under a pixel while its pixels stay put. A real hop is a whole character or line.
+    const JITTER_PX = 2;
+    const heights = new Set<number>();
+    const moved: string[] = [];
+    let previous = await snapshot();
+    for (let tick = 0; tick < 160; tick++) {
+      await page.clock.runFor(100);
+      const current = await snapshot();
+      heights.add(current.height);
+      // While one role is being typed or deleted, letters present in both samples must not move.
+      const sameRole =
+        current.text.startsWith(previous.text) || previous.text.startsWith(current.text);
+      const shared = sameRole ? Math.min(current.text.length, previous.text.length) : 0;
+      for (let i = 0; i < shared; i++) {
+        const [x0, y0] = previous.spots[i];
+        const [x1, y1] = current.spots[i];
+        if (Math.abs(x1 - x0) > JITTER_PX || Math.abs(y1 - y0) > JITTER_PX) {
+          moved.push(`"${current.text[i]}" in "${current.text}"`);
+        }
+      }
+      previous = current;
+    }
+    expect.soft([...heights], 'role line heights seen').toHaveLength(1);
+    expect(moved, 'letters that moved after being typed').toEqual([]);
+  });
+
   test('phone layout has no horizontal overflow and the drawer navigates', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/');
