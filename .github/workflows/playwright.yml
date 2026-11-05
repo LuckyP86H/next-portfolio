@@ -8,7 +8,8 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    # Pinned: Playwright does not support the Ubuntu 26.04 that ubuntu-latest now points to.
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v5
 

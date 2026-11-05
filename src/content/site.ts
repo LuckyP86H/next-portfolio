@@ -19,5 +19,5 @@ export const site = {
   twitter: 'https://twitter.com/PaulLovesCoding',
 } as const;
 
-/** GitHub Pages serves the site under /next-portfolio; `next dev` serves it at the root. */
-export const basePath = process.env.NODE_ENV === 'production' ? '/next-portfolio' : '';
+/** Set by next.config.js: /next-portfolio on GitHub Pages, empty on Cloudflare and in `next dev`. */
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';

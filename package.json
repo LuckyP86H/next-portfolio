@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "projects:check": "node scripts/check-projects.mjs",
     "test": "playwright test --config=tests/playwright.config.ts",
     "test:ui": "playwright test --config=tests/playwright.config.ts --ui",
     "test:headed": "playwright test --config=tests/playwright.config.ts --headed"
