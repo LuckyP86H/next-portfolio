@@ -1,7 +1,13 @@
 import type { Skill } from '../types/skills';
 
 /**
- * Skills shown in the radar panel. Levels are self-assessed (0–100).
+ * Skills shown in the radar panel. Levels are self-assessed (0–100) and calibrated
+ * against evidence: years of production use at work, plus what the projects in
+ * projects.ts actually exercise (language mix, services built, tests written).
+ *   ~80+  daily production use for years
+ *   ~60   comfortable and productive; reaches for it unprompted
+ *   ~40   shipped real projects with it; still looks things up
+ *   ~20   learning, small projects only
  * Keep at least three skills per category so a filtered radar is still a polygon;
  * the unfiltered view shows the six highest levels.
  */
@@ -15,21 +21,21 @@ export const skills: Skill[] = [
   },
   {
     name: 'Python',
-    level: 60,
+    level: 65,
     category: 'Languages',
-    description: 'Scripting, data wrangling, and automation.',
+    description: 'Services, task queues, and tooling: Celery pipelines, FastAPI, and an MCP server.',
   },
   {
     name: 'TypeScript',
-    level: 35,
+    level: 55,
     category: 'Languages',
-    description: 'Typed front-end and tooling code, including this site.',
+    description: 'Strict TypeScript across full-stack apps on Cloudflare Workers, with unit and e2e tests.',
   },
   {
     name: 'Go',
-    level: 20,
+    level: 25,
     category: 'Languages',
-    description: 'Learning Go for small backend services and CLIs.',
+    description: 'A ConnectRPC backend with auth interceptors and tests; still learning the idioms.',
   },
 
   // Backend
@@ -46,24 +52,36 @@ export const skills: Skill[] = [
     description: 'Designing and running microservice APIs for enterprise customers.',
   },
   {
+    name: 'Celery',
+    level: 50,
+    category: 'Backend',
+    description: 'Task queues and canvas workflows (chords, retries, idempotent tasks) and how they fail under worker loss.',
+  },
+  {
     name: 'FastAPI / Alembic',
     level: 45,
     category: 'Backend',
     description: 'Python API services with FastAPI and Alembic-managed schema migrations.',
   },
   {
-    name: 'Protobuf',
+    name: 'Protobuf / ConnectRPC',
     level: 45,
     category: 'Backend',
-    description: 'Schema-first service contracts with Protocol Buffers.',
+    description: 'Schema-first service contracts, with Go and TypeScript generated from one .proto.',
   },
 
   // Frontend
   {
     name: 'React',
+    level: 45,
+    category: 'Frontend',
+    description: 'React 19 apps with hooks and reducers: games, a Celery monitor UI, and a bookstore.',
+  },
+  {
+    name: 'SvelteKit / Astro',
     level: 30,
     category: 'Frontend',
-    description: 'Interactive interfaces with modern React and hooks.',
+    description: 'Svelte 5 and Astro apps on Workers, with server routes, streaming (SSE), and no-JS fallbacks.',
   },
   {
     name: 'Tailwind CSS',
@@ -93,9 +111,29 @@ export const skills: Skill[] = [
   },
   {
     name: 'Redis',
-    level: 30,
+    level: 45,
     category: 'Data',
-    description: 'Caching and fast key-value lookups for hot data paths.',
+    description: 'Caching, Celery result backends, and sorted-set leaderboards.',
+  },
+
+  // AI & Agents
+  {
+    name: 'LLM Agents & Tool Use',
+    level: 55,
+    category: 'AI & Agents',
+    description: 'Tool-calling loops with validated calls, step budgets, SSE streaming, and labelled non-AI fallbacks.',
+  },
+  {
+    name: 'RAG / pgvector',
+    level: 45,
+    category: 'AI & Agents',
+    description: 'Embeddings, pgvector similarity search, and swappable LLM providers through LiteLLM.',
+  },
+  {
+    name: 'MCP',
+    level: 40,
+    category: 'AI & Agents',
+    description: 'Building Model Context Protocol servers that give agents safe, scoped access to local data.',
   },
 
   // Infrastructure & Tooling
@@ -113,9 +151,15 @@ export const skills: Skill[] = [
   },
   {
     name: 'GitHub Actions',
-    level: 55,
+    level: 60,
     category: 'Infrastructure & Tooling',
-    description: 'CI/CD workflows integrated with the repository.',
+    description: 'CI for lint, types, unit and e2e tests, plus Dependabot, across every project.',
+  },
+  {
+    name: 'Cloudflare',
+    level: 45,
+    category: 'Infrastructure & Tooling',
+    description: 'Workers, D1, and Durable Objects for small full-stack apps.',
   },
   {
     name: 'AWS',
@@ -125,9 +169,9 @@ export const skills: Skill[] = [
   },
   {
     name: 'RabbitMQ',
-    level: 20,
+    level: 40,
     category: 'Infrastructure & Tooling',
-    description: 'Message queues for asynchronous, event-driven workflows.',
+    description: 'Acks, prefetch, requeue and dead-lettering for asynchronous, event-driven workflows.',
   },
   {
     name: 'IoC',
@@ -152,6 +196,7 @@ export const categoryColors: Record<string, string> = {
   Backend: '#ff2fb9',
   Frontend: '#39ff14',
   Data: '#ffb000',
+  'AI & Agents': '#4d9fff',
   'Infrastructure & Tooling': '#a970ff',
 };
 

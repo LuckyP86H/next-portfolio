@@ -23,22 +23,6 @@ npm run dev        # http://localhost:3000
 
 `./scripts/validate-ci.sh` runs the same test-then-build sequence as CI.
 
-## Project structure
-
-```
-src/
-├── app/            layout.tsx, page.tsx (the Bento grid), globals.css
-├── components/
-│   ├── layout/     Header (IDE tab bar), Footer (status bar), MotionProvider
-│   ├── sections/   One component per Bento panel
-│   └── ui/         BentoCard, Button, CodeBlock
-├── content/        All copy and facts: site, about-me, skills, experience, projects
-├── lib/            useTypewriter hook, D3 skills radar
-└── types/          Shared TypeScript types
-tests/e2e/          Playwright specs
-public/assets/      Images referenced from src/content/projects.ts
-```
-
 ## Editing content
 
 Everything a visitor reads lives in `src/content/`:
@@ -48,7 +32,10 @@ Everything a visitor reads lives in `src/content/`:
 - `about-me.ts`: the paragraphs in the `about.ts` terminal panel.
 - `skills.ts`: radar skills, categories and colors. Keep at least three skills per category.
 - `experience.ts`: the `experience.log` timeline.
-- `projects.ts`: project cards, code snippets and optional images.
+- `projects.ts`: project cards, code snippets and optional images. Each entry summarises its
+  repository's README and records a `verified` date. Run `npm run projects:check` to list
+  entries whose repo has been pushed to since (add `-- --strict` to exit non-zero). To
+  refresh one, re-read the repo's README, update the entry, then bump `verified`.
 
 ## Deployment
 
