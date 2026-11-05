@@ -5,6 +5,10 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "next-portfolio",
   "compatibility_date": "2026-11-03",
+  // Required by Workers Builds: non-production branches deploy with `wrangler preview`,
+  // which refuses to run unless a previews block exists. Empty is fine — assets and
+  // compatibility settings stay at the top level.
+  "previews": {},
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
