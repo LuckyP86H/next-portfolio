@@ -43,6 +43,11 @@ Pushing to `main` runs `.github/workflows/deploy.yml`: the Playwright suite must
 `next build` exports the site and publishes `./out` to GitHub Pages. The `/next-portfolio`
 base path is applied only in production builds, so local development runs at the root.
 
+The site also deploys to Cloudflare Workers as static assets (`wrangler.jsonc` serves `./out`).
+Set the build command to `npm run build` and the deploy command to `npx wrangler deploy`.
+`next.config.js` drops the `/next-portfolio` base path when `WORKERS_CI=1` (set by Workers
+Builds); set `NEXT_PUBLIC_BASE_PATH` to override it.
+
 ## License
 
 MIT

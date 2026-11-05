@@ -1,0 +1,13 @@
+{
+  // Static export: `next build` writes the site to ./out and Workers serves it as static assets.
+  // Without this file, `wrangler deploy` auto-detects Next.js and attempts an OpenNext
+  // migration, which does not apply to a static export.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "next-portfolio",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+}
