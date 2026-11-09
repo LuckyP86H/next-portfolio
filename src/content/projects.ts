@@ -45,6 +45,7 @@ export const projects: Project[] = [
     tags: ['Backend & Systems'],
     githubUrl: 'https://github.com/LuckyP86H/learn-what-rhyme-with-salary',
     language: 'python',
+    image: '/assets/images/celery_call_pipeline.jpg',
     snippet: `RELIABILITY_PROFILES = {
     "hardened": {
         "task_acks_late": True,
@@ -70,6 +71,7 @@ export const projects: Project[] = [
     tags: ['AI & Agents'],
     githubUrl: 'https://github.com/LuckyP86H/smart-bookstore',
     language: 'go',
+    image: '/assets/images/smart_bookstore.jpg',
     snippet: `// publicProcedures skip authentication entirely. ISBN lookup is public so it
 // can prefill the add-book form before a merchant has signed in; its handler
 // validates input and never echoes upstream errors, since anyone can call it.
@@ -89,6 +91,7 @@ var publicProcedures = map[string]bool{
     tags: ['Web Apps'],
     githubUrl: 'https://github.com/LuckyP86H/bamazon',
     language: 'typescript',
+    image: '/assets/images/bamazon.jpg',
     snippet: `/** Prices a cart from the current catalogue. Quantities above the live stock are kept but flagged. */
 export function priceCart(items: CartItems, products: PricedProduct[]): PricedCart {
   const byId = new Map(products.map((product) => [product.id, product]));
@@ -116,6 +119,7 @@ export function priceCart(items: CartItems, products: PricedProduct[]): PricedCa
     tags: ['Games'],
     githubUrl: 'https://github.com/LuckyP86H/clicky-game',
     language: 'typescript',
+    image: '/assets/images/clickster.jpg',
     snippet: `export function applyClick(state: RunState, cardId: string, now: number): RunState {
 	if (state.status !== 'playing') return state;
 
@@ -140,6 +144,7 @@ export function priceCart(items: CartItems, products: PricedProduct[]): PricedCa
     tags: ['AI & Agents'],
     githubUrl: 'https://github.com/LuckyP86H/Weft',
     language: 'python',
+    image: '/assets/images/weft.jpg',
     snippet: `@mcp.tool(name="weft_scrub")
 def weft_scrub(text: str) -> dict[str, Any]:
     """Redact secrets, email addresses and phone numbers from \`\`text\`\`.
@@ -163,6 +168,7 @@ def weft_scrub(text: str) -> dict[str, Any]:
     tags: ['AI & Agents'],
     githubUrl: 'https://github.com/LuckyP86H/Gif-Tastic-Dynamic',
     language: 'typescript',
+    image: '/assets/images/giftastic.jpg',
     snippet: `export const LIMITS = { steps: 6, searches: 3, images: 12, perLook: 6, picks: 3 } as const;
 
 // The loop: ask the model what to do, run the tool it picked, show it the
@@ -207,6 +213,7 @@ export function createRng(seed: number): Rng {
     tags: ['Games'],
     githubUrl: 'https://github.com/LuckyP86H/Letter-Guess-Game',
     language: 'typescript',
+    image: '/assets/images/letter_guess.jpg',
     snippet: `// The same letter for everyone on a given UTC day. FNV-1a over the date
 // string keeps it deterministic without storing anything.
 export function dailyLetter(day: string): string {
@@ -229,6 +236,7 @@ export function dailyLetter(day: string): string {
     tags: ['Backend & Systems'],
     githubUrl: 'https://github.com/walk-wait/WalkWaitApp',
     language: 'javascript',
+    image: '/assets/images/walkwaitapp.jpg',
     snippet: `const router = require("express").Router();
 const appController = require("../../controllers/appController");
 
@@ -253,6 +261,7 @@ module.exports = router;`,
     githubUrl: 'https://github.com/LuckyP86H/Trivia-Game',
     liveUrl: 'https://luckyp86h.github.io/Trivia-Game',
     language: 'javascript',
+    image: '/assets/images/trivia_game.jpg',
     snippet: `function startTimer() {
   timer = setInterval(function () {
     if (--seconds <= 0) {
